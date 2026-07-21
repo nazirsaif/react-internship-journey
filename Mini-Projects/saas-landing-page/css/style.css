@@ -310,7 +310,11 @@ ul {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 5rem 2rem;
+    padding: 0 2rem;
+}
+
+.section {
+    padding: 5rem 0;
 }
 
 .section-title {
@@ -334,10 +338,13 @@ ul {
     gap: 2rem;
 }
 
-.feature-card {
+.card {
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 1rem;
+}
+
+.feature-card {
     padding: 2rem;
     transition: all 0.3s ease;
     cursor: pointer;
@@ -394,9 +401,6 @@ ul {
 }
 
 .pricing-card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 1rem;
     padding: 2.5rem 2rem;
     position: relative;
     display: flex;
@@ -466,8 +470,7 @@ ul {
 
 /* Testimonials Section */
 .testimonials {
-    padding-top: 5rem;
-    padding-bottom: 5rem;
+    /* Padding handled by .section */
 }
 
 .testimonials-grid {
@@ -477,9 +480,6 @@ ul {
 }
 
 .testimonial-card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 1rem;
     padding: 2rem;
     display: flex;
     flex-direction: column;
