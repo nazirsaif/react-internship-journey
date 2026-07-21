@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar" id="navbar">
+    <nav class="navbar" id="navbar" aria-label="Main navigation">
         <div class="nav-container">
             <a href="#" class="logo">AIFlow</a>
             
@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <div class="hamburger" id="hamburger">
+            <div class="hamburger" id="hamburger" role="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation menu" tabindex="0">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="hero-illustration">
-                <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <defs>
                         <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
@@ -75,7 +75,7 @@
                 <!-- Card 1 -->
                 <div class="card feature-card">
                     <div class="feature-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
                     <h3>AI Automation</h3>
                     <p>Automate repetitive tasks and workflows with our advanced machine learning models.</p>
@@ -83,7 +83,7 @@
                 <!-- Card 2 -->
                 <div class="card feature-card">
                     <div class="feature-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                        <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
                     </div>
                     <h3>Cloud Infrastructure</h3>
                     <p>Deploy globally with low latency. Our robust infrastructure scales automatically.</p>
@@ -91,7 +91,7 @@
                 <!-- Card 3 -->
                 <div class="card feature-card">
                     <div class="feature-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                     </div>
                     <h3>Analytics Dashboard</h3>
                     <p>Get real-time insights into your app's performance with customizable metrics.</p>
@@ -99,7 +99,7 @@
                 <!-- Card 4 -->
                 <div class="card feature-card">
                     <div class="feature-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                     </div>
                     <h3>Security</h3>
                     <p>Enterprise-grade security features built-in to protect your sensitive data.</p>
@@ -119,9 +119,9 @@
                     <h3>Starter</h3>
                     <div class="price"><span>$</span>19<span>/mo</span></div>
                     <ul class="features-list">
-                        <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Up to 5 projects</li>
-                        <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Basic analytics</li>
-                        <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> 24-hour support response time</li>
+                        <li><svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Up to 5 projects</li>
+                        <li><svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Basic analytics</li>
+                        <li><svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> 24-hour support response time</li>
                     </ul>
                     <a href="#" class="btn btn-outline" style="width: 100%; text-align: center;">Choose Starter</a>
                 </div>
@@ -132,10 +132,10 @@
                     <h3>Professional</h3>
                     <div class="price"><span>$</span>49<span>/mo</span></div>
                     <ul class="features-list">
-                        <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Unlimited projects</li>
-                        <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Advanced analytics & reports</li>
-                        <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> 1-hour support response time</li>
-                        <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Custom domain</li>
+                        <li><svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Unlimited projects</li>
+                        <li><svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Advanced analytics & reports</li>
+                        <li><svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> 1-hour support response time</li>
+                        <li><svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Custom domain</li>
                     </ul>
                     <a href="#" class="btn btn-primary" style="width: 100%; text-align: center;">Choose Professional</a>
                 </div>
@@ -145,11 +145,11 @@
                     <h3>Enterprise</h3>
                     <div class="price"><span>$</span>99<span>/mo</span></div>
                     <ul class="features-list">
-                        <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Everything in Professional</li>
-                        <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Dedicated account manager</li>
-                        <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Phone support 24/7</li>
-                        <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Custom integration</li>
-                        <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> SLA</li>
+                        <li><svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Everything in Professional</li>
+                        <li><svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Dedicated account manager</li>
+                        <li><svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Phone support 24/7</li>
+                        <li><svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Custom integration</li>
+                        <li><svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> SLA</li>
                     </ul>
                     <a href="#" class="btn btn-outline" style="width: 100%; text-align: center;">Contact Sales</a>
                 </div>
@@ -206,9 +206,9 @@
             
             <div class="faq-list">
                 <div class="faq-item">
-                    <button class="faq-question">
+                    <button class="faq-question" aria-expanded="false">
                         How does pricing work?
-                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-icon" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div class="faq-answer">
                         <p>Our pricing is tier-based depending on the number of projects and features you need. You can start with our $19/mo plan and upgrade at any time. There are no hidden fees or long-term contracts.</p>
@@ -216,9 +216,9 @@
                 </div>
                 
                 <div class="faq-item">
-                    <button class="faq-question">
+                    <button class="faq-question" aria-expanded="false">
                         Can I cancel my subscription at any time?
-                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-icon" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div class="faq-answer">
                         <p>Yes, you can cancel your subscription at any time from your account settings. You'll continue to have access to your plan until the end of your billing cycle.</p>
@@ -226,9 +226,9 @@
                 </div>
                 
                 <div class="faq-item">
-                    <button class="faq-question">
+                    <button class="faq-question" aria-expanded="false">
                         Do you offer a free trial?
-                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-icon" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div class="faq-answer">
                         <p>We don't offer a free trial, but we do have a 14-day money-back guarantee. If you're not satisfied with AIFlow within the first 14 days, we'll give you a full refund.</p>
@@ -236,9 +236,9 @@
                 </div>
                 
                 <div class="faq-item">
-                    <button class="faq-question">
+                    <button class="faq-question" aria-expanded="false">
                         What kind of support do you provide?
-                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-icon" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div class="faq-answer">
                         <p>All plans include email support. The Professional plan includes faster response times, and our Enterprise plan includes a dedicated account manager and 24/7 phone support.</p>
@@ -296,3 +296,4 @@
     <script src="js/script.js"></script>
 </body>
 </html>
+
