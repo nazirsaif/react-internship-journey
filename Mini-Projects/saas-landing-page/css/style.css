@@ -698,3 +698,14 @@ body.light-mode .hamburger .bar {
 #newsletter-email.success {
     border-color: #10b981 !important;
 }
+
+/* Scroll Reveal */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease-out;
+}
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
