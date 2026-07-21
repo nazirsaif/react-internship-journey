@@ -687,3 +687,14 @@ body.light-mode .pricing {
 body.light-mode .hamburger .bar {
     background-color: #0F172A;
 }
+
+/* Newsletter */
+#newsletter-email {
+    transition: border-color 0.3s ease;
+}
+#newsletter-email.error {
+    border-color: #ef4444 !important;
+}
+#newsletter-email.success {
+    border-color: #10b981 !important;
+}

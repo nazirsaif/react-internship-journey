@@ -252,6 +252,24 @@
         </div>
     </section>
 
+    <section class="section newsletter" id="newsletter" style="background-color: var(--card-bg); border-top: 1px solid var(--border-color); text-align: center; padding: 4rem 2rem;">
+        <div class="container" style="max-width: 600px;">
+            <h2 class="section-title" style="margin-bottom: 0.5rem;">Join our newsletter</h2>
+            <p class="section-subtitle" style="margin-bottom: 2rem;">Get the latest product updates and AI insights in your inbox.</p>
+            <form id="newsletter-form" style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;" novalidate>
+                <div style="flex-grow: 1; min-width: 250px; position: relative; text-align: left;">
+                    <input type="email" id="newsletter-email" placeholder="Enter your email" aria-label="Email address" required
+                           style="width: 100%; padding: 0.75rem 1rem; border-radius: 0.5rem; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-main); outline: none;">
+                    <div id="newsletter-error" style="color: #ef4444; font-size: 0.875rem; margin-top: 0.5rem; display: none;">Please enter a valid email address.</div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="white-space: nowrap;">Subscribe</button>
+            </form>
+            <div id="newsletter-success" style="color: #10b981; font-weight: 500; margin-top: 1rem; display: none;">
+                Thanks for subscribing! Check your inbox soon.
+            </div>
+        </div>
+    </section>
+
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">

@@ -82,4 +82,47 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Newsletter Form Validation
+    const newsletterForm = document.getElementById('newsletter-form');
+    const emailInput = document.getElementById('newsletter-email');
+    const errorMsg = document.getElementById('newsletter-error');
+    const successMsg = document.getElementById('newsletter-success');
+
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const email = emailInput.value.trim();
+            
+            if (!emailRegex.test(email)) {
+                emailInput.classList.add('error');
+                emailInput.classList.remove('success');
+                errorMsg.style.display = 'block';
+                successMsg.style.display = 'none';
+                emailInput.setAttribute('aria-invalid', 'true');
+            } else {
+                emailInput.classList.remove('error');
+                emailInput.classList.add('success');
+                errorMsg.style.display = 'none';
+                emailInput.setAttribute('aria-invalid', 'false');
+                
+                const btn = newsletterForm.querySelector('button');
+                btn.disabled = true;
+                btn.textContent = 'Subscribing...';
+                
+                setTimeout(() => {
+                    successMsg.style.display = 'block';
+                    newsletterForm.style.display = 'none';
+                }, 1000);
+            }
+        });
+        
+        emailInput.addEventListener('input', () => {
+            emailInput.classList.remove('error');
+            errorMsg.style.display = 'none';
+            emailInput.removeAttribute('aria-invalid');
+        });
+    }
 });
