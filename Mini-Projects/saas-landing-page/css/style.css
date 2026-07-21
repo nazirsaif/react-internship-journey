@@ -654,3 +654,36 @@ ul {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
 }
+
+/* Light Mode Theme */
+body.light-mode {
+    --bg-color: #F8FAFC;
+    --text-main: #0F172A;
+    --text-muted: #475569;
+    --border-color: #E2E8F0;
+    --card-bg: #FFFFFF;
+}
+
+body.light-mode .navbar {
+    background-color: rgba(248, 250, 252, 0.9);
+}
+
+body.light-mode .logo, 
+body.light-mode .nav-links a:hover, 
+body.light-mode .footer-links a:hover {
+    color: #0F172A;
+}
+
+body.light-mode .hero-title {
+    background: linear-gradient(to right, #0F172A, #334155);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.light-mode .pricing {
+    background-color: rgba(241, 245, 249, 0.5);
+}
+
+body.light-mode .hamburger .bar {
+    background-color: #0F172A;
+}

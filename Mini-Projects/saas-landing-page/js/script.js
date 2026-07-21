@@ -2,6 +2,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('nav-menu');
 
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const moonIcon = document.getElementById('moon-icon');
+    const sunIcon = document.getElementById('sun-icon');
+    
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        moonIcon.style.display = 'none';
+        sunIcon.style.display = 'block';
+    }
+
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-mode');
+        const isLight = document.body.classList.contains('light-mode');
+        
+        if (isLight) {
+            localStorage.setItem('theme', 'light');
+            moonIcon.style.display = 'none';
+            sunIcon.style.display = 'block';
+        } else {
+            localStorage.setItem('theme', 'dark');
+            moonIcon.style.display = 'block';
+            sunIcon.style.display = 'none';
+        }
+    });
+
     function toggleMenu() {
         const isActive = hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
