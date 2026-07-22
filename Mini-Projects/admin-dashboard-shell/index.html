@@ -140,18 +140,89 @@
                 </div>
             </div>
 
-            <!-- Content Area Placeholders for scrolling -->
-            <div class="content-placeholder">
-                <div class="placeholder-box large">
-                    <h3 class="placeholder-title">Recent Activity</h3>
-                    <div class="skeleton-line"></div>
-                    <div class="skeleton-line"></div>
-                    <div class="skeleton-line"></div>
-                    <div class="skeleton-line"></div>
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <div class="content-box large">
+                    <h3 class="box-title">Recent Activity</h3>
+                    <div class="table-responsive">
+                        <table class="activity-table">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Action</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><div class="user-cell"><img src="https://ui-avatars.com/api/?name=Miraan+Gee&background=random" class="small-avatar" alt="User"> Miraan Gee</div></td>
+                                    <td>Updated system settings</td>
+                                    <td>Today, 2:30 PM</td>
+                                    <td><span class="status-badge success">Completed</span></td>
+                                </tr>
+                                <tr>
+                                    <td><div class="user-cell"><img src="https://ui-avatars.com/api/?name=John+Doe&background=random" class="small-avatar" alt="User"> John Doe</div></td>
+                                    <td>Added a new user</td>
+                                    <td>Today, 1:15 PM</td>
+                                    <td><span class="status-badge success">Completed</span></td>
+                                </tr>
+                                <tr>
+                                    <td><div class="user-cell"><img src="https://ui-avatars.com/api/?name=Sarah+Smith&background=random" class="small-avatar" alt="User"> Sarah Smith</div></td>
+                                    <td>Exported analytics report</td>
+                                    <td>Yesterday</td>
+                                    <td><span class="status-badge warning">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td><div class="user-cell"><img src="https://ui-avatars.com/api/?name=Alex+Johnson&background=random" class="small-avatar" alt="User"> Alex Johnson</div></td>
+                                    <td>Deleted legacy accounts</td>
+                                    <td>Yesterday</td>
+                                    <td><span class="status-badge danger">Failed</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="placeholder-row">
-                    <div class="placeholder-box small"></div>
-                    <div class="placeholder-box small"></div>
+                
+                <div class="content-row">
+                    <div class="content-box small">
+                        <h3 class="box-title">Traffic Overview</h3>
+                        <div class="fake-chart">
+                            <div class="bar" style="height: 40%"></div>
+                            <div class="bar" style="height: 70%"></div>
+                            <div class="bar" style="height: 50%"></div>
+                            <div class="bar" style="height: 90%"></div>
+                            <div class="bar" style="height: 30%"></div>
+                            <div class="bar" style="height: 60%"></div>
+                            <div class="bar" style="height: 80%"></div>
+                        </div>
+                    </div>
+                    <div class="content-box small">
+                        <h3 class="box-title">System Health</h3>
+                        <div class="health-stats">
+                            <div>
+                                <div class="stat-row">
+                                    <span>CPU Usage</span>
+                                    <span>42%</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress" style="width: 42%; background-color: var(--primary);"></div></div>
+                            </div>
+                            <div>
+                                <div class="stat-row">
+                                    <span>Memory</span>
+                                    <span>78%</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress" style="width: 78%; background-color: #F59E0B;"></div></div>
+                            </div>
+                            <div>
+                                <div class="stat-row">
+                                    <span>Storage</span>
+                                    <span>91%</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress" style="width: 91%; background-color: #EC4899;"></div></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
