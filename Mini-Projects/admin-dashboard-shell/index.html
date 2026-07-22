@@ -1,2 +1,164 @@
-<!-- Step 4 Widgets -->
-<div class='widget-grid'></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard Shell</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="dashboard-shell">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fa-solid fa-layer-group"></i>
+                <span class="logo-text">AdminOS</span>
+            </div>
+            <!-- Collapse Toggle (Desktop) -->
+            <button class="toggle-btn" id="sidebarToggle" aria-label="Toggle Sidebar">
+                <i class="fa-solid fa-chevron-left toggle-icon"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul class="nav-list">
+                <li class="nav-item active">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span class="nav-label">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span class="nav-label">Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-users"></i>
+                        <span class="nav-label">Users</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-gear"></i>
+                        <span class="nav-label">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="main-wrapper">
+        
+        <!-- Topbar -->
+        <header class="topbar" id="topbar">
+            <div class="topbar-left">
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <h1 class="page-title">Dashboard</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" placeholder="Search..." class="search-input" aria-label="Search">
+                </div>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=4F46E5&color=fff" alt="User Avatar" class="avatar">
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Widget Grid -->
+            <div class="widget-grid">
+                <!-- Widget 1 -->
+                <div class="widget-card">
+                    <div class="widget-icon" style="color: #4F46E5; background-color: rgba(79, 70, 229, 0.1);"><i class="fa-solid fa-users"></i></div>
+                    <div class="widget-info">
+                        <p class="widget-label">Total Users</p>
+                        <h3 class="widget-value">24,592</h3>
+                    </div>
+                </div>
+                <!-- Widget 2 -->
+                <div class="widget-card">
+                    <div class="widget-icon" style="color: #10B981; background-color: rgba(16, 185, 129, 0.1);"><i class="fa-solid fa-dollar-sign"></i></div>
+                    <div class="widget-info">
+                        <p class="widget-label">Revenue</p>
+                        <h3 class="widget-value">$89,430</h3>
+                    </div>
+                </div>
+                <!-- Widget 3 -->
+                <div class="widget-card">
+                    <div class="widget-icon" style="color: #F59E0B; background-color: rgba(245, 158, 11, 0.1);"><i class="fa-solid fa-eye"></i></div>
+                    <div class="widget-info">
+                        <p class="widget-label">Page Views</p>
+                        <h3 class="widget-value">1.2M</h3>
+                    </div>
+                </div>
+                <!-- Widget 4 -->
+                <div class="widget-card">
+                    <div class="widget-icon" style="color: #EC4899; background-color: rgba(236, 72, 153, 0.1);"><i class="fa-solid fa-chart-column"></i></div>
+                    <div class="widget-info">
+                        <p class="widget-label">Conversion</p>
+                        <h3 class="widget-value">3.4%</h3>
+                    </div>
+                </div>
+                <!-- Widget 5 -->
+                <div class="widget-card">
+                    <div class="widget-icon" style="color: #8B5CF6; background-color: rgba(139, 92, 246, 0.1);"><i class="fa-solid fa-clock"></i></div>
+                    <div class="widget-info">
+                        <p class="widget-label">Avg Session</p>
+                        <h3 class="widget-value">2m 14s</h3>
+                    </div>
+                </div>
+                <!-- Widget 6 -->
+                <div class="widget-card">
+                    <div class="widget-icon" style="color: #14B8A6; background-color: rgba(20, 184, 166, 0.1);"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                    <div class="widget-info">
+                        <p class="widget-label">Growth</p>
+                        <h3 class="widget-value">+12.5%</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area Placeholders for scrolling -->
+            <div class="content-placeholder">
+                <div class="placeholder-box large">
+                    <h3 class="placeholder-title">Recent Activity</h3>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line"></div>
+                </div>
+                <div class="placeholder-row">
+                    <div class="placeholder-box small"></div>
+                    <div class="placeholder-box small"></div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
