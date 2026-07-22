@@ -1,1 +1,2 @@
-/* Step 1 */
+/* Step 3 Grid Layout */
+.dashboard-shell { display: grid; }
