@@ -48,4 +48,4 @@ admin-dashboard-shell/
 3. Resize the window to test desktop (1920px), tablet (768px), and mobile (375px) breakpoints!
 
 ## Live Demo
-*(Placeholder for live deployment URL)*
+*(https://nazirsaif.github.io/react-internship-journey/Mini-Projects/admin-dashboard-shell/index.html)*
