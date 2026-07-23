@@ -8,3 +8,16 @@ function debounce(fn, delay) {
         }, delay);
     };
 }
+// Throttle Utility
+function throttle(fn, limit) {
+    let inThrottle;
+    return function (...args) {
+        if (!inThrottle) {
+            fn.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => {
+                inThrottle = false;
+            }, limit);
+        }
+    };
+}
