@@ -11,7 +11,9 @@ const axios = require('axios');
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3000', // Replace with your actual client domain
+  origin: function(origin, callback){
+    return callback(null, true);
+  },
   credentials: true
 }));
 app.use(bodyParser.json());

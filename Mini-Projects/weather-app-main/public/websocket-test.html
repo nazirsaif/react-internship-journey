@@ -17,7 +17,7 @@
         const log = document.getElementById('log');
 
         document.getElementById('connect').onclick = () => {
-            ws = new WebSocket('ws://localhost:3001');
+            ws = new WebSocket((window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host);
             ws.onopen = () => log.innerHTML += '<p>Connected to server</p>';
             ws.onmessage = (event) => log.innerHTML += `<p>Message from server: ${event.data}</p>`;
             ws.onclose = () => log.innerHTML += '<p>Disconnected from server</p>';

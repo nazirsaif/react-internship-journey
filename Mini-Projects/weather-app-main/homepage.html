@@ -306,7 +306,7 @@
         const weatherDisplay = document.getElementById('weather-display');
 
         function connectWebSocket() {
-            ws = new WebSocket('ws://localhost:3001');
+            ws = new WebSocket((window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host);
 
             ws.onopen = () => {
                 console.log('Connected to server');
@@ -445,7 +445,7 @@
 
    /*  async function fetchUserSettings() {
         try {
-            const response = await fetch('http://localhost:3001/user-settings');
+            const response = await fetch('/user-settings');
             if (response.ok) {
                 const settings = await response.json();
                 console.log('Fetched settings:', settings);
@@ -521,7 +521,7 @@
     }
 
     // Usage
-    const wsManager = new WebSocketManager('ws://localhost:3001');
+    const wsManager = new WebSocketManager((window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host);
 
     // Example of sending a message
     document.getElementById('send').onclick = () => {
@@ -537,7 +537,7 @@
       }
     };
 
-    const ws = new WebSocket('ws://localhost:3001');
+    const ws = new WebSocket((window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host);
 
     document.getElementById('faq-send').onclick = () => {
         const question = document.getElementById('faq-input').value.trim();
