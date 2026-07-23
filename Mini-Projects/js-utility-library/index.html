@@ -3,28 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JS Utility Library Demo</title>
+    <title>JS Utility Library Pro</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
-        <h1>JS Utility Library</h1>
+        <header class="glass-header">
+            <h1>JS Utility <span class="gradient-text">Pro</span></h1>
+            <p>Premium utilities with zero dependencies.</p>
+        </header>
 
-        <section class="demo-section">
-            <h2>Live Search (Debounce & Pub-Sub)</h2>
-            <input type="text" id="search-input" placeholder="Search countries...">
-            <span id="typing-indicator" class="hidden">typing...</span>
-            <ul id="search-results"></ul>
+        <section class="demo-section glass-panel">
+            <h2>Live API Search <span class="badge">Debounce</span></h2>
+            <div class="search-wrapper">
+                <input type="text" id="search-input" placeholder="Search for users...">
+            </div>
+            <div id="search-results" class="grid-results"></div>
         </section>
-
-        <section class="demo-section">
-            <h2>Scroll Counter (Throttle)</h2>
-            <p>Scroll down this page to see the throttled scroll counter increase.</p>
-            <div id="scroll-counter">0</div>
-        </section>
-        
-        <!-- Extra content to force scrolling -->
-        <div class="spacer"></div>
     </div>
     <script src="js/utils.js"></script>
     <script src="js/script.js"></script>
