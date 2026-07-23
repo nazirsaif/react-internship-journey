@@ -18,13 +18,13 @@ const renderCards = (container, data) => {
         container.innerHTML = '<div class="empty-state">No results found.</div>';
         return;
     }
-    container.innerHTML = data.map(item => 
+    container.innerHTML = data.map(item => `
         <div class="card">
-            <div class="card-avatar"> + item.name.charAt(0) + </div>
-            <div class="card-title"> + item.name + </div>
-            <div class="card-subtitle"> + item.role + </div>
+            <div class="card-avatar">${item.name.charAt(0)}</div>
+            <div class="card-title">${item.name}</div>
+            <div class="card-subtitle">${item.role}</div>
         </div>
-    ).join('');
+    `).join('');
 };
 
 const mockApiSearch = (query) => {
