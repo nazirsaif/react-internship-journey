@@ -11,7 +11,7 @@ A professional, high-converting SaaS landing page built for a fictional AI start
 ## 🛠️ Tech Stack
 - **HTML5:** Semantic architecture and accessibility (`aria-` attributes, landmarks).
 - **CSS3:** Custom properties (variables), Grid, Flexbox, media queries for responsive design, and CSS transitions.
-- **Vanilla JavaScript:** DOM manipulation, scroll-reveal IntersectionObserver animations, form validation, and `localStorage` for theme persistence.
+- **TypeScript:** Strictly typed DOM manipulation, dynamic data rendering, scroll-reveal IntersectionObserver animations, form validation, and `localStorage` for theme persistence.
 
 ## ✨ Features
 - **Responsive Layout:** Fluidly scales across mobile, tablet, and desktop devices without horizontal overflow.
@@ -33,10 +33,13 @@ A professional, high-converting SaaS landing page built for a fictional AI start
 ```text
 saas-landing-page/
 ├── index.html       # Main HTML document
+├── tsconfig.json    # TypeScript configuration
 ├── css/
 │   └── style.css    # Centralized CSS stylesheet
+├── src/
+│   └── script.ts    # TypeScript source code
 ├── js/
-│   └── script.js    # Interactive logic (Theme, Animations, Menu)
+│   └── script.js    # Compiled JavaScript output
 ├── assets/          # Image and icon assets
 └── README.md        # Project documentation
 ```
