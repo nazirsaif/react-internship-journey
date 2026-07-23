@@ -210,10 +210,14 @@
             console.log('Alert settings:', settings);
 
             // Call the function to check weather conditions and send alerts
-            await checkWeatherConditions(settings);
+            const emailSent = await checkWeatherConditions(settings);
 
-            // Show popup alert
-            document.getElementById("popup").style.display = "block";
+            if (emailSent) {
+                // Show popup alert
+                document.getElementById("popup").style.display = "block";
+            } else {
+                alert("Failed to send email. Please check the console for details, or verify your EmailJS keys.");
+            }
         });
 
         document.getElementById("back-home").addEventListener("click", () => {
@@ -253,13 +257,19 @@
                     alertMessages.push('Fog alert: Foggy conditions detected in your area');
                 }
 
-                // Send email if there are any alerts
+                // Send email ALWAYS, either with alerts or a status update
+                let emailBody = "";
                 if (alertMessages.length > 0) {
-                    await sendAlert(settings.email, alertMessages.join('\n'));
+                    emailBody = alertMessages.join('\n');
+                } else {
+                    emailBody = `Current weather in ${settings.city} is normal: ${data.main.temp}°C, ${data.weather[0].main}. No alerts triggered at this time based on your conditions.`;
                 }
+                
+                return await sendAlert(settings.email, emailBody);
 
             } catch (error) {
                 console.error('Error checking weather conditions:', error);
+                return false;
             }
         }
 
@@ -276,8 +286,10 @@
                     }
                 );
                 console.log('Alert email sent successfully', response);
+                return true;
             } catch (error) {
                 console.error('Error sending email:', error);
+                return false;
             }
         }
     </script>
