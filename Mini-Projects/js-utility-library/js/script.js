@@ -36,6 +36,19 @@ const mockApiSearch = (query) => {
     });
 };
 
+const toastContainer = document.getElementById('toast-container');
+eventBus.subscribe('toast', (message) => {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = '<span>' + message + '</span>';
+    toastContainer.appendChild(toast);
+    setTimeout(() => {
+        toast.classList.add('fade-out');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+});
+setTimeout(() => eventBus.publish('toast', 'Welcome to JS Utility Pro! 👋'), 500);
+
 const debouncedSearch = debounce(async (query) => {
     if (!query.trim()) {
         renderCards(searchResults, usersData.slice(0, 4));
@@ -43,8 +56,9 @@ const debouncedSearch = debounce(async (query) => {
         return;
     }
     const results = await mockApiSearch(query);
-    renderCards(searchResults, results);
+        renderCards(searchResults, results);
     spinner.classList.add('hidden');
+    eventBus.publish('toast', 'Found ' + results.length + ' results for "' + query + '"');
 }, 500);
 
 searchInput.addEventListener('input', (e) => {
