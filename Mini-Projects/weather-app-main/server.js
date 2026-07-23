@@ -23,7 +23,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
-    mongoUrl: 'mongodb://127.0.0.1:27017/weatherwise', // Your MongoDB connection string
+    mongoUrl: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/weatherwise', // Your MongoDB connection string
     collectionName: 'sessions'
   }),
   cookie: {
@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Serve static files from the root directory
 app.use(express.static(__dirname));
 
-mongoose.connect('mongodb://127.0.0.1:27017/weatherwise')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/weatherwise')
   .then(() => {
     console.log("Connected to MongoDB locally");
   })

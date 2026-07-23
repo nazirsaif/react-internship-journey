@@ -6,7 +6,7 @@ A modern and responsive Weather Application that provides real-time weather info
 
 ## 🚀 Live Demo
 
-Add your deployed application link here.
+[🌍 Weather App Live Demo](https://your-weather-app.onrender.com) *(Replace this with your actual live link once deployed!)*
 
 ---
 
