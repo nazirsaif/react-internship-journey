@@ -231,6 +231,11 @@
                 );
                 const data = await response.json();
 
+                // Ensure the city was found and data is valid
+                if (data.cod != 200) {
+                    return { success: false, error: `Weather API Error: ${data.message} (City: ${settings.city})` };
+                }
+
                 let alertMessages = [];
 
                 // Check temperature conditions
