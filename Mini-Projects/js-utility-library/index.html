@@ -3,8 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JS Utility Library</title>
+    <title>JS Utility Library Demo</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <div class="container">
+        <h1>JS Utility Library</h1>
+
+        <section class="demo-section">
+            <h2>Live Search (Debounce & Pub-Sub)</h2>
+            <input type="text" id="search-input" placeholder="Search countries...">
+            <span id="typing-indicator" class="hidden">typing...</span>
+            <ul id="search-results"></ul>
+        </section>
+    </div>
+    <script src="js/utils.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
