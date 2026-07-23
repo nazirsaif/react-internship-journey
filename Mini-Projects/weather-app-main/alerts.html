@@ -210,13 +210,13 @@
             console.log('Alert settings:', settings);
 
             // Call the function to check weather conditions and send alerts
-            const emailSent = await checkWeatherConditions(settings);
+            const emailResult = await checkWeatherConditions(settings);
 
-            if (emailSent) {
+            if (emailResult.success) {
                 // Show popup alert
                 document.getElementById("popup").style.display = "block";
             } else {
-                alert("Failed to send email. Please check the console for details, or verify your EmailJS keys.");
+                alert("Failed to send email. Error details:\n\n" + emailResult.error);
             }
         });
 
@@ -269,7 +269,7 @@
 
             } catch (error) {
                 console.error('Error checking weather conditions:', error);
-                return false;
+                return { success: false, error: error.message || String(error) };
             }
         }
 
@@ -286,10 +286,12 @@
                     }
                 );
                 console.log('Alert email sent successfully', response);
-                return true;
+                return { success: true };
             } catch (error) {
                 console.error('Error sending email:', error);
-                return false;
+                // EmailJS errors have a "text" or "message" property
+                const errorMsg = error.text || error.message || JSON.stringify(error) || String(error);
+                return { success: false, error: errorMsg };
             }
         }
     </script>
