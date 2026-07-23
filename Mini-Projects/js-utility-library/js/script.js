@@ -1,57 +1,55 @@
-// Hardcoded array of items
-const countries = [
-    "Argentina", "Australia", "Brazil", "Canada", "China", 
-    "France", "Germany", "India", "Italy", "Japan", 
-    "Mexico", "Netherlands", "New Zealand", "South Africa", "South Korea", 
-    "Spain", "Sweden", "Switzerland", "United Kingdom", "United States"
+const usersData = [
+    { name: "Alice Johnson", role: "Frontend Engineer" },
+    { name: "Bob Smith", role: "Backend Developer" },
+    { name: "Charlie Davis", role: "UI/UX Designer" },
+    { name: "Diana Prince", role: "Product Manager" },
+    { name: "Evan Wright", role: "DevOps Engineer" },
+    { name: "Fiona Gallagher", role: "Data Scientist" },
+    { name: "George Martin", role: "Technical Writer" },
+    { name: "Hannah Abbott", role: "QA Tester" }
 ];
 
-// Elements
 const searchInput = document.getElementById('search-input');
-const typingIndicator = document.getElementById('typing-indicator');
+const spinner = document.getElementById('loading-spinner');
 const searchResults = document.getElementById('search-results');
 
-// 1. Live Search Demo (Debounce & Pub-Sub)
-eventBus.subscribe('typing', (isTyping) => {
-    if (isTyping) {
-        typingIndicator.classList.remove('hidden');
-    } else {
-        typingIndicator.classList.add('hidden');
-    }
-});
-
-function performSearch(query) {
-    eventBus.publish('typing', false);
-    
-    if (!query.trim()) {
-        searchResults.innerHTML = '';
+const renderCards = (container, data) => {
+    if (data.length === 0) {
+        container.innerHTML = '<div class="empty-state">No results found.</div>';
         return;
     }
+    container.innerHTML = data.map(item => 
+        <div class="card">
+            <div class="card-avatar"> + item.name.charAt(0) + </div>
+            <div class="card-title"> + item.name + </div>
+            <div class="card-subtitle"> + item.role + </div>
+        </div>
+    ).join('');
+};
 
-    const filtered = countries.filter(country => 
-        country.toLowerCase().includes(query.toLowerCase())
-    );
+const mockApiSearch = (query) => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            const filtered = usersData.filter(u => u.name.toLowerCase().includes(query.toLowerCase()) || u.role.toLowerCase().includes(query.toLowerCase()));
+            resolve(filtered);
+        }, 800);
+    });
+};
 
-    searchResults.innerHTML = filtered.map(country => "<li>" + country + "</li>").join('');
-}
-
-const debouncedSearch = debounce((query) => performSearch(query), 500);
+const debouncedSearch = debounce(async (query) => {
+    if (!query.trim()) {
+        renderCards(searchResults, usersData.slice(0, 4));
+        spinner.classList.add('hidden');
+        return;
+    }
+    const results = await mockApiSearch(query);
+    renderCards(searchResults, results);
+    spinner.classList.add('hidden');
+}, 500);
 
 searchInput.addEventListener('input', (e) => {
-    eventBus.publish('typing', true);
+    spinner.classList.remove('hidden');
     debouncedSearch(e.target.value);
 });
-// 2. Scroll Counter Demo (Throttle)
-const scrollCounter = document.getElementById('scroll-counter');
-let count = 0;
 
-function handleScroll() {
-    count++;
-    if (scrollCounter) {
-        scrollCounter.textContent = count;
-    }
-}
-
-const throttledScroll = throttle(handleScroll, 300);
-
-window.addEventListener('scroll', throttledScroll);
+renderCards(searchResults, usersData.slice(0, 4));

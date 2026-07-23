@@ -108,3 +108,24 @@ input[type="text"]:focus {
 
 .card-title { font-weight: bold; margin-bottom: 0.25rem; }
 .card-subtitle { color: #94a3b8; font-size: 0.9rem; }
+.spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255,255,255,0.1);
+    border-radius: 50%;
+    border-top-color: var(--primary);
+    animation: spin 1s ease-in-out infinite;
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+@keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+.hidden { opacity: 0; pointer-events: none; visibility: hidden; }
+.empty-state { grid-column: 1 / -1; text-align: center; padding: 3rem; color: #94a3b8; }
+.card-avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    margin-bottom: 1rem; display: flex; align-items: center;
+    justify-content: center; font-weight: bold; font-size: 1.2rem;
+}
