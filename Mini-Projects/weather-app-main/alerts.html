@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Alerts</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-image: url('public/images/2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: #007acc;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 40px auto;
+        }
+
+        input, select, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #007acc;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005fa3;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background: rgba(244, 244, 244, 0.7);
+            backdrop-filter: blur(5px);
+            position: sticky;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer p {
+            color: #333;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .alert-conditions {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .alert-conditions div {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .threshold-input {
+            width: 80px;
+            margin-left: auto;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .back-button {
+            background-color: #007acc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .back-button:hover {
+            background-color: #005fa3;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Weather Alerts</h1>
+    </header>
+    <main>
+        <form id="alert-settings">
+            <h2>Set Your Weather Alerts</h2>
+            
+            <label for="email">Your Email:</label>
+            <input type="email" id="email" name="email" required placeholder="your@email.com" autocomplete="email">
+            
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required placeholder="Enter city name" autocomplete="address-level2">
+            
+            <label>Alert Conditions:</label>
+            <div class="alert-conditions">
+                <div>
+                    <input type="checkbox" id="temp-high" name="conditions">
+                    <label for="temp-high">High Temperature</label>
+                    <input type="number" id="temp-high-threshold" placeholder="°C" class="threshold-input" autocomplete="off">
+                </div>
+                
+                <div>
+                    <input type="checkbox" id="temp-low" name="conditions">
+                    <label for="temp-low">Low Temperature</label>
+                    <input type="number" id="temp-low-threshold" placeholder="°C" class="threshold-input" autocomplete="off">
+                </div>
+                
+                <div>
+                    <input type="checkbox" id="rain" name="conditions">
+                    <label for="rain">Rain</label>
+                </div>
+                
+                <div>
+                    <input type="checkbox" id="snow" name="conditions">
+                    <label for="snow">Snow</label>
+                </div>
+                
+                <div>
+                    <input type="checkbox" id="fog" name="conditions">
+                    <label for="fog">Fog</label>
+                </div>
+            </div>
+
+            <label for="frequency">Check Frequency:</label>
+            <select id="frequency" name="frequency" required autocomplete="off">
+                <option value="daily">Daily</option>
+                <option value="hourly">Hourly</option>
+            </select>
+
+            <button type="submit">Save Alert Settings</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2024 Weather-Wise</p>
+    </footer>
+
+    <div id="popup" class="popup" style="display:none;">
+        <p>Alert email sent!</p>
+        <button id="back-home" class="back-button">Go Back to Homepage</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            emailjs.init("eFLfp4i3OGKgOQ4mn"); // Replace with your EmailJS public key
+            console.log('EmailJS initialized');
+        });
+
+        document.getElementById("alert-settings").addEventListener("submit", async (event) => {
+            event.preventDefault(); // Prevent the default form submission
+
+            const settings = {
+                email: document.getElementById("email").value,
+                city: document.getElementById("city").value,
+                conditions: [],
+                tempHighThreshold: document.getElementById("temp-high-threshold").value,
+                tempLowThreshold: document.getElementById("temp-low-threshold").value,
+                frequency: document.getElementById("frequency").value
+            };
+
+            // Collect selected conditions
+            const conditions = document.querySelectorAll('input[name="conditions"]:checked');
+            conditions.forEach(condition => settings.conditions.push(condition.id));
+
+            // Debugging: Log settings to ensure they are correct
+            console.log('Alert settings:', settings);
+
+            // Call the function to check weather conditions and send alerts
+            await checkWeatherConditions(settings);
+
+            // Show popup alert
+            document.getElementById("popup").style.display = "block";
+        });
+
+        document.getElementById("back-home").addEventListener("click", () => {
+            window.location.href = "homepage.html"; // Change to your homepage URL
+        });
+
+        async function checkWeatherConditions(settings) {
+            try {
+                const response = await fetch(
+                    `https://api.openweathermap.org/data/2.5/weather?q=${settings.city}&units=metric&appid=0ab13fdbba1599dda116f576fa9511f6`
+                );
+                const data = await response.json();
+
+                let alertMessages = [];
+
+                // Check temperature conditions
+                if (settings.conditions.includes('temp-high') && 
+                    data.main.temp > settings.tempHighThreshold) {
+                    alertMessages.push(`High temperature alert: Current temperature is ${data.main.temp}°C`);
+                }
+
+                if (settings.conditions.includes('temp-low') && 
+                    data.main.temp < settings.tempLowThreshold) {
+                    alertMessages.push(`Low temperature alert: Current temperature is ${data.main.temp}°C`);
+                }
+
+                // Check weather conditions
+                const weatherCondition = data.weather[0].main.toLowerCase();
+                if (settings.conditions.includes('rain') && weatherCondition.includes('rain')) {
+                    alertMessages.push('Rain alert: Rain is detected in your area');
+                }
+                if (settings.conditions.includes('snow') && weatherCondition.includes('snow')) {
+                    alertMessages.push('Snow alert: Snow is detected in your area');
+                }
+                if (settings.conditions.includes('fog') && 
+                    (weatherCondition.includes('fog') || weatherCondition.includes('mist'))) {
+                    alertMessages.push('Fog alert: Foggy conditions detected in your area');
+                }
+
+                // Send email if there are any alerts
+                if (alertMessages.length > 0) {
+                    await sendAlert(settings.email, alertMessages.join('\n'));
+                }
+
+            } catch (error) {
+                console.error('Error checking weather conditions:', error);
+            }
+        }
+
+        async function sendAlert(email, message) {
+            try {
+                console.log('Attempting to send email to:', email);
+                const response = await emailjs.send(
+                    "service_zexng0m", // Ensure this matches your EmailJS service ID
+                    "template_cyptnst", // Ensure this matches your EmailJS template ID
+                    {
+                        to_email: email,
+                        message: message, 
+                        subject: "Weather Alert Notification"
+                    }
+                );
+                console.log('Alert email sent successfully', response);
+            } catch (error) {
+                console.error('Error sending email:', error);
+            }
+        }
+    </script>
+</body>
+</html>
