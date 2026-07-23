@@ -41,3 +41,17 @@ searchInput.addEventListener('input', (e) => {
     eventBus.publish('typing', true);
     debouncedSearch(e.target.value);
 });
+// 2. Scroll Counter Demo (Throttle)
+const scrollCounter = document.getElementById('scroll-counter');
+let count = 0;
+
+function handleScroll() {
+    count++;
+    if (scrollCounter) {
+        scrollCounter.textContent = count;
+    }
+}
+
+const throttledScroll = throttle(handleScroll, 300);
+
+window.addEventListener('scroll', throttledScroll);
