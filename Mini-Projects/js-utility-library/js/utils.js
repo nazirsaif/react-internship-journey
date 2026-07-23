@@ -1,13 +1,27 @@
-// Debounce Utility
-function debounce(fn, delay) {
+// Debounce Utility (Pro)
+function debounce(fn, delay, immediate = false) {
     let timeoutId;
-    return function (...args) {
+    
+    const debounced = function (...args) {
+        const callNow = immediate && !timeoutId;
+        
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
-            fn.apply(this, args);
+            timeoutId = null;
+            if (!immediate) fn.apply(this, args);
         }, delay);
+        
+        if (callNow) fn.apply(this, args);
     };
+    
+    debounced.cancel = function() {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+    };
+    
+    return debounced;
 }
+
 // Throttle Utility
 function throttle(fn, limit) {
     let inThrottle;
@@ -21,6 +35,7 @@ function throttle(fn, limit) {
         }
     };
 }
+
 // Pub-Sub Event Bus
 const eventBus = {
     events: {},
