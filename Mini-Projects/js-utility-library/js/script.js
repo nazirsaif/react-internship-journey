@@ -53,3 +53,12 @@ searchInput.addEventListener('input', (e) => {
 });
 
 renderCards(searchResults, usersData.slice(0, 4));
+const readingProgress = document.getElementById('reading-progress');
+const handleScroll = () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.body.scrollHeight - window.innerHeight;
+    const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    readingProgress.style.width = scrollPercent + '%';
+};
+const throttledScroll = throttle(handleScroll, 100, { leading: true, trailing: true });
+window.addEventListener('scroll', throttledScroll);

@@ -6,7 +6,7 @@
     <title>JS Utility Library Pro</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body><div class="reading-progress-container"><div id="reading-progress"></div></div>
     <div class="container">
         <header class="glass-header">
             <h1>JS Utility <span class="gradient-text">Pro</span></h1>
@@ -19,6 +19,10 @@
                 <input type="text" id="search-input" placeholder="Search for users..."><div id="loading-spinner" class="spinner hidden"></div>
             </div>
             <div id="search-results" class="grid-results"></div>
+        </section>
+            <section class="demo-section glass-panel scroll-demo" style="height: 2000px;">
+            <h2>Reading Progress <span class="badge">Throttle</span></h2>
+            <p>Scroll down this huge section to see the progress bar at the top update efficiently.</p>
         </section>
     </div>
     <script src="js/utils.js"></script>
