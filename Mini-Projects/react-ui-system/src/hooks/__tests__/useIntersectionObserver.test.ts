@@ -9,8 +9,11 @@ class MockIntersectionObserver {
   observe = mockObserve;
   disconnect = mockDisconnect;
   unobserve = vi.fn();
+  callback: IntersectionObserverCallback;
   
-  constructor(public callback: IntersectionObserverCallback) {}
+  constructor(callback: IntersectionObserverCallback) {
+    this.callback = callback;
+  }
 }
 
 Object.defineProperty(window, 'IntersectionObserver', {
