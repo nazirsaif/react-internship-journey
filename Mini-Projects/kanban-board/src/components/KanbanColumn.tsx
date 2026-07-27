@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Card } from '@internal/ui-system';
@@ -27,8 +26,9 @@ export function KanbanColumn({ id, title, cards }: KanbanColumnProps) {
         display: 'flex', 
         flexDirection: 'column', 
         height: '100%',
-        backgroundColor: isOver ? '#f0f0f0' : 'white',
-        transition: 'background-color 0.2s'
+        borderColor: isOver ? 'var(--primary-color)' : 'var(--border-color)',
+        transition: 'border-color 0.2s, box-shadow 0.2s',
+        boxShadow: isOver ? '0 0 0 1px var(--primary-color)' : 'none'
       }}
     >
       <Card.Header>
@@ -40,9 +40,7 @@ export function KanbanColumn({ id, title, cards }: KanbanColumnProps) {
         style={{ 
           flexGrow: 1, 
           minHeight: '200px',
-          padding: '0.5rem',
-          backgroundColor: '#f8f9fa',
-          borderRadius: '4px'
+          padding: '0.5rem'
         }}
       >
         <SortableContext items={cards.map(c => c.id)} strategy={verticalListSortingStrategy}>

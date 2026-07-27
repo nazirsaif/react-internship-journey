@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   DndContext, 
   closestCorners, 
@@ -78,7 +78,14 @@ export function KanbanBoard() {
           value={newTaskTitle} 
           onChange={e => setNewTaskTitle(e.target.value)}
           placeholder="New task title..."
-          style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
+          style={{ 
+            padding: '0.75rem 1rem', 
+            borderRadius: 'var(--radius-md)', 
+            border: '1px solid var(--border-color)',
+            backgroundColor: 'var(--bg-color)',
+            color: 'var(--text-main)',
+            outline: 'none'
+          }}
         />
         <Button onClick={() => {
           if (!newTaskTitle.trim()) return;

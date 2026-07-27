@@ -74,6 +74,23 @@ function kanbanReducer(state: HistoryState, action: KanbanAction): HistoryState 
         future: []
       };
     }
+    case 'EDIT_CARD': {
+      const { columnId, cardId, data } = action.payload;
+      const newPresent = {
+        ...present,
+        columns: {
+          ...present.columns,
+          [columnId]: present.columns[columnId].map(c => 
+            c.id === cardId ? { ...c, ...data } : c
+          )
+        }
+      };
+      return {
+        past: [...past, present],
+        present: newPresent,
+        future: []
+      };
+    }
     case 'MOVE_CARD': {
       const { activeId, overId, overColumnId } = action.payload;
       

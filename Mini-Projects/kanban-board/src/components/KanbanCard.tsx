@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Card, Button } from '@internal/ui-system';
-import type { CardItem } from '../types';
+import type { CardItem, ColumnId } from '../types';
 import { useKanban } from '../KanbanContext';
+import { EditCardModal } from './EditCardModal';
 
 interface KanbanCardProps {
   card: CardItem;
-  columnId: string;
+  columnId: ColumnId;
 }
 
 export function KanbanCard({ card, columnId }: KanbanCardProps) {
   const { dispatch } = useKanban();
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const {
     attributes,
     listeners,
@@ -38,21 +40,42 @@ export function KanbanCard({ card, columnId }: KanbanCardProps) {
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Card hoverable padding="sm" style={{ marginBottom: '0.5rem', cursor: 'grab', background: 'white' }}>
+      <Card hoverable padding="sm" style={{ marginBottom: '0.5rem', cursor: 'grab', backgroundColor: 'var(--bg-color)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span>{card.title}</span>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={(e: React.MouseEvent) => {
-              e.stopPropagation(); // prevent drag start
-              dispatch({ type: 'DELETE_CARD', payload: { cardId: card.id, columnId: columnId as any } });
-            }}
-          >
-            X
-          </Button>
+          <div style={{ display: 'flex', gap: '0.25rem' }}>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={(e: React.MouseEvent) => {
+                e.stopPropagation();
+                setIsEditOpen(true);
+              }}
+            >
+              Edit
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={(e: React.MouseEvent) => {
+                e.stopPropagation(); // prevent drag start
+                dispatch({ type: 'DELETE_CARD', payload: { cardId: card.id, columnId: columnId as any } });
+              }}
+            >
+              X
+            </Button>
+          </div>
         </div>
       </Card>
+
+      {isEditOpen && (
+        <EditCardModal
+          isOpen={isEditOpen}
+          onClose={() => setIsEditOpen(false)}
+          card={card}
+          onSave={(data) => dispatch({ type: 'EDIT_CARD', payload: { columnId: columnId as ColumnId, cardId: card.id, data } })}
+        />
+      )}
     </div>
   );
 }
