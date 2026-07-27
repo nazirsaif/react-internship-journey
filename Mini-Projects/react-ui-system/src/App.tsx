@@ -13,7 +13,7 @@ function App() {
       setCurrentPath(window.location.pathname);
     };
     window.addEventListener('popstate', onLocationChange);
-    return () => window.removeEventListener('popstate', onLocationChange);
+    return () => { window.removeEventListener('popstate', onLocationChange); };
   }, []);
 
   if (currentPath === '/playground') {

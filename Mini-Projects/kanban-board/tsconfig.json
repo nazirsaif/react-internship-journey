@@ -3,6 +3,7 @@
     "target": "es2023",
     "module": "esnext",
     "lib": ["ES2023", "DOM"],
+    "jsx": "react-jsx",
     "types": ["vite/client"],
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
@@ -12,7 +13,13 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
+    "ignoreDeprecations": "6.0",
     "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@lib/*": ["../react-ui-system/src/lib/*"],
+      "@hooks/*": ["../react-ui-system/src/hooks/*"]
+    },
 
     /* Linting */
     "noUnusedLocals": true,

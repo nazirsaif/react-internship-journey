@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
-import { KanbanState, HistoryState, KanbanAction, ColumnId, CardId } from './types';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import type { KanbanState, HistoryState, KanbanAction, ColumnId } from './types';
 import { useLocalStorage } from '@internal/ui-system';
 
 const initialKanbanState: KanbanState = {
@@ -11,12 +11,6 @@ const initialKanbanState: KanbanState = {
     'in-progress': [],
     'done': []
   }
-};
-
-const initialState: HistoryState = {
-  past: [],
-  present: initialKanbanState,
-  future: []
 };
 
 function kanbanReducer(state: HistoryState, action: KanbanAction): HistoryState {

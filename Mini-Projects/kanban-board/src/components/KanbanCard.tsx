@@ -2,7 +2,7 @@ import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Card, Button } from '@internal/ui-system';
-import { CardItem } from '../types';
+import type { CardItem } from '../types';
 import { useKanban } from '../KanbanContext';
 
 interface KanbanCardProps {
@@ -44,7 +44,7 @@ export function KanbanCard({ card, columnId }: KanbanCardProps) {
           <Button 
             variant="ghost" 
             size="sm" 
-            onClick={(e) => {
+            onClick={(e: React.MouseEvent) => {
               e.stopPropagation(); // prevent drag start
               dispatch({ type: 'DELETE_CARD', payload: { cardId: card.id, columnId: columnId as any } });
             }}

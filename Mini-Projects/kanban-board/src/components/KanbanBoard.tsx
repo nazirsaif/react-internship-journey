@@ -6,13 +6,13 @@ import {
   PointerSensor, 
   useSensor, 
   useSensors,
-  DragEndEvent,
-  DragOverEvent
+  type DragEndEvent,
+  type DragOverEvent
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { KanbanColumn } from './KanbanColumn';
 import { useKanban } from '../KanbanContext';
-import { ColumnId } from '../types';
+import type { ColumnId } from '../types';
 import { Button } from '@internal/ui-system';
 
 export function KanbanBoard() {
@@ -37,8 +37,6 @@ export function KanbanBoard() {
 
     const isActiveAColumn = active.data.current?.type === 'Column';
     if (isActiveAColumn) return;
-
-    const isOverAColumn = over.data.current?.type === 'Column';
     
     // We handle the cross-column moves in DragOver for smoother sorting UX if needed,
     // but the reducer handles both same-column and cross-column moves in MOVE_CARD.
