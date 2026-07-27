@@ -52,6 +52,7 @@ export function KanbanCard({ card, columnId }: KanbanCardProps) {
             <Button 
               variant="ghost" 
               size="sm"
+              aria-label="Edit task"
               onClick={(e: React.MouseEvent) => {
                 e.stopPropagation();
                 setIsEditOpen(true);
@@ -62,6 +63,7 @@ export function KanbanCard({ card, columnId }: KanbanCardProps) {
             <Button 
               variant="ghost" 
               size="sm" 
+              aria-label="Delete task"
               onClick={(e: React.MouseEvent) => {
                 e.stopPropagation(); // prevent drag start
                 dispatch({ type: 'DELETE_CARD', payload: { cardId: card.id, columnId: columnId as any } });

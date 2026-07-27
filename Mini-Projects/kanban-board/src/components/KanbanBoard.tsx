@@ -124,6 +124,7 @@ export function KanbanBoard() {
           value={newTaskTitle} 
           onChange={e => setNewTaskTitle(e.target.value)}
           placeholder="New task title..."
+          aria-label="New task title"
           style={{ 
             padding: '0.75rem 1rem', 
             borderRadius: 'var(--radius-md)', 
@@ -152,6 +153,7 @@ export function KanbanBoard() {
             value={searchTerm} 
             onChange={e => setSearchTerm(e.target.value)}
             placeholder="Search cards..."
+            aria-label="Search cards"
             style={{ 
               padding: '0.75rem 1rem', 
               borderRadius: 'var(--radius-md)', 
