@@ -3,6 +3,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Card, Button } from '@internal/ui-system';
 import type { CardItem, ColumnId } from '../types';
+import { PREDEFINED_LABELS } from '../types';
 import { useKanban } from '../KanbanContext';
 import { EditCardModal } from './EditCardModal';
 
@@ -66,6 +67,26 @@ export function KanbanCard({ card, columnId }: KanbanCardProps) {
             </Button>
           </div>
         </div>
+        {card.labels && card.labels.length > 0 && (
+          <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap', marginTop: '0.5rem' }}>
+            {card.labels.map(labelId => {
+              const labelDef = PREDEFINED_LABELS.find(l => l.id === labelId);
+              if (!labelDef) return null;
+              return (
+                <span key={labelId} style={{ 
+                  backgroundColor: labelDef.color, 
+                  color: 'white', 
+                  padding: '0.125rem 0.375rem', 
+                  borderRadius: '0.25rem',
+                  fontSize: '0.65rem',
+                  fontWeight: 600
+                }}>
+                  {labelDef.name}
+                </span>
+              );
+            })}
+          </div>
+        )}
       </Card>
 
       {isEditOpen && (

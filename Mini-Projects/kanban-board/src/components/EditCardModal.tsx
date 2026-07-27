@@ -3,10 +3,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Modal, Button } from '@internal/ui-system';
 import type { CardItem } from '../types';
+import { PREDEFINED_LABELS } from '../types';
 
 const editCardSchema = z.object({
   title: z.string().min(1, 'Title is required').max(100, 'Title is too long'),
   description: z.string().max(500, 'Description is too long').optional(),
+  labels: z.array(z.string()).optional(),
 });
 
 type EditCardFormValues = z.infer<typeof editCardSchema>;
@@ -24,6 +26,7 @@ export function EditCardModal({ isOpen, onClose, card, onSave }: EditCardModalPr
     defaultValues: {
       title: card.title,
       description: card.description || '',
+      labels: card.labels || [],
     }
   });
 
@@ -69,6 +72,30 @@ export function EditCardModal({ isOpen, onClose, card, onSave }: EditCardModalPr
             }}
           />
           {errors.description && <span style={{ color: '#ef4444', fontSize: '0.875rem' }}>{errors.description.message}</span>}
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>Labels</label>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            {PREDEFINED_LABELS.map(label => (
+              <label key={label.id} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.875rem' }}>
+                <input
+                  type="checkbox"
+                  value={label.id}
+                  {...register('labels')}
+                />
+                <span style={{ 
+                  backgroundColor: label.color, 
+                  color: 'white', 
+                  padding: '0.125rem 0.375rem', 
+                  borderRadius: '0.25rem',
+                  fontSize: '0.75rem'
+                }}>
+                  {label.name}
+                </span>
+              </label>
+            ))}
+          </div>
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
