@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather-Wise - Homepage</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f7f9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #333; 
+        background-image: url('public/images/2.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+    }
+
+    header {
+        background-color: #007acc;
+        width: 100%;
+        padding: 15px 0;
+        text-align: center;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+        color: #ffffff;
+        font-weight: 700;
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+    }
+
+    nav ul li {
+        margin: 0 15px;
+    }
+
+    nav ul li a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    nav ul li a:hover {
+        color: #ff6b35;
+    }
+
+    main {
+        max-width: 800px;
+        width: 100%;
+        padding: 20px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        padding-bottom: 60px;
+    }
+
+    .auth-container {
+        background-color: #ffffff;
+        padding: 30px;
+        width: 90%;
+        max-width: 400px;
+        border-radius: 8px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: left;
+        margin-top: 50px;
+    }
+
+    .auth-container h2 {
+        color: #007acc;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .auth-container label {
+        font-weight: 500;
+        margin-top: 10px;
+        display: block;
+        color: #555;
+    }
+
+    .auth-container input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    .auth-container input:focus {
+        border-color: #007acc;
+    }
+
+    .auth-container button {
+        width: 100%;
+        background-color: #007acc;
+        color: #ffffff;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1em;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    .auth-container button:hover {
+        background-color: #005ea1;
+    }
+
+    footer {
+        background-color: #f1f1f1;
+        color: #666;
+        width: 100%;
+        padding: 15px;
+        text-align: center;
+        font-size: 0.9em;
+        position: fixed;
+        bottom: 0;
+    }
+
+    @media (max-width: 600px) {
+        nav ul {
+            flex-direction: column;
+        }
+
+        nav ul li {
+            margin: 5px 0;
+        }
+
+        form input, form button {
+            width: 90%;
+        }
+
+        #weather-display {
+            width: 90%;
+        }
+    }
+
+    button {
+        background-color: #007acc;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        margin: 10px 5px;
+        font-size: 1em;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s;
+    }
+
+    button:hover {
+        background-color: #005ea1;
+        transform: scale(1.05);
+    }
+
+    .weather-img {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+        border-radius: 10px; 
+        margin-top: 10px;
+    }
+
+    #weather-display {
+        background-color: #ffffff;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+    }
+
+    #weather-display:hover {
+        transform: scale(1.05);
+    }
+
+    .weather-impacts, 
+    .recommendations, 
+    #weather-display {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        margin: 20px auto;
+        max-width: 800px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .weather-impacts:hover, 
+    .recommendations:hover, 
+    #weather-display:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    ::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgba(0, 122, 204, 0.5);
+        border-radius: 10px;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 122, 204, 0.7);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Weather-Wise</h1>
+    <nav>
+      <ul>
+        <li><a href="#search" aria-label="Search for weather by city">Search</a></li>
+        <li><a href="forcast.html" aria-label="View weather forecast">Forecast</a></li>
+        <li><a href="alerts.html" aria-label="View weather alerts">Alerts</a></li>
+        <li><a href="javascript:void(0);" id="logout-btn">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section id="search">
+      <h2>Search Weather by City</h2>
+      <form id="city-form">
+        <label for="city-input">Enter City Name:</label>
+        <input type="text" id="city-input" name="city" placeholder="e.g., RAWALPINDI" required>
+        <button type="submit">Search</button>
+      </form>
+    </section>
+
+    <section id="weather-info" aria-live="polite">
+      <h2>Weather Details</h2>
+      <div id="weather-display">
+        <p>Search for a city to view the weather.</p>
+      </div>
+      <!-- <div id="weather-impacts" class="weather-impacts" style="display: none;"> -->
+        <!-- Weather impacts will be displayed here -->
+      <!-- </div> -->
+      <!-- <div id="activity-recommendations" class="recommendations" style="display: none;"> -->
+        <!-- Activity recommendations will be displayed here -->
+      <!-- </div> -->
+    </section>
+
+    <section id="actions">
+      <h2>Quick Actions</h2>
+      <button id="forecast-btn">View Forecast</button>
+      <button id="alerts-btn">View Alerts</button>
+    </section>
+
+    <!-- WebSocket Test Section -->
+    <section id="websocket-test">
+      <h3>WebSocket Test</h3>
+      <button id="connect">Connect</button>
+      <button id="send">Send Message</button>
+      <button id="disconnect">Disconnect</button>
+      <div id="log"></div>
+    </section>
+
+    <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+        <div id="faq-questions">
+            <input type="text" id="faq-input" placeholder="Ask a question...">
+            <button id="faq-send">Send</button>
+        </div>
+        <div id="faq-responses"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Weather-Wise. By Saifullah Nazir.</p>
+  </footer>
+
+  <script src="https://unpkg.com/i18next@latest/i18next.min.js"></script>
+  <script src="https://unpkg.com/i18next-browser-languagedetector@latest/i18nextBrowserLanguageDetector.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let ws;
+        const cityInput = document.getElementById('city-input');
+        const weatherDisplay = document.getElementById('weather-display');
+
+        function connectWebSocket() {
+            ws = new WebSocket((window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host);
+
+            ws.onopen = () => {
+                console.log('Connected to server');
+            };
+
+            ws.onmessage = (event) => {
+                weatherDisplay.innerHTML = `<p>${event.data}</p>`;
+            };
+
+            ws.onclose = () => {
+                console.log('Disconnected from server');
+            };
+        }
+
+        document.getElementById('city-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const city = cityInput.value.trim();
+            if (city) {
+                if (!ws || ws.readyState === WebSocket.CLOSED) {
+                    connectWebSocket();
+                }
+                if (ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({ city }));
+                } else {
+                    console.error('WebSocket is not open');
+                    // Fallback to direct API call if WebSocket is not open
+                    fetchWeatherDirectly(city);
+                }
+            } else {
+                alert('Please enter a city name.');
+            }
+        });
+
+        function fetchWeatherDirectly(city) {
+            // Example of direct API call (replace with actual API call)
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid='0ab13fdbba1599dda116f576fa9511f6'`)
+                .then(response => response.json())
+                .then(data => {
+                    weatherDisplay.innerHTML = `
+                        <h3>Weather in ${data.name}</h3>
+                        <p>Temperature: ${data.main.temp}°C</p>
+                        <p>Condition: ${data.weather[0].description}</p>
+                    `;
+                })
+                .catch(error => console.error('Error fetching weather data:', error));
+        }
+
+        document.getElementById('connect').onclick = connectWebSocket;
+
+        document.getElementById('disconnect').onclick = () => {
+            if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+                ws.close();
+            }
+        };
+    });
+
+    window.onload = function() {
+        fetchUserSettings();
+        updateContent();
+    };
+
+    document.getElementById("forecast-btn").addEventListener("click", () => {
+      window.location.href = "forcast.html";
+    });
+
+    document.getElementById("alerts-btn").addEventListener("click", () => {
+      window.location.href = "alerts.html";
+    });
+
+    document.getElementById("city-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const cityInput = document.getElementById("city-input").value.trim().toLowerCase();
+      const weatherDisplay = document.getElementById("weather-display");
+
+      if (cityInput) {
+        const apiKey = "0ab13fdbba1599dda116f576fa9511f6";
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityInput}&appid=${apiKey}&units=metric`;
+
+        try {
+          const response = await fetch(apiUrl);
+          if (!response.ok) {
+            if (response.status === 404) throw new Error("City not found.");
+            if (response.status === 401) throw new Error("Invalid API key.");
+            if (response.status === 429) throw new Error("Too many requests. Please try later.");
+            throw new Error("An unknown error occurred.");
+          }
+
+          const data = await response.json();
+          const { main, weather, name } = data;
+
+          weatherDisplay.innerHTML = `
+            <h3>Weather in ${name}</h3>
+            <p>Temperature: ${main.temp}°C</p>
+            <p>Humidity: ${main.humidity}%</p>
+            <p>Condition: ${weather[0].description}</p>
+          `;
+        } catch (error) {
+          weatherDisplay.innerHTML = `<p>Error: ${error.message}</p>`;
+        }
+      } else {
+        weatherDisplay.innerHTML = `<p>Please enter a valid city name.</p>`;
+      }
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+        try {
+            const response = await fetch('/logout', { method: 'GET' });
+            if (response.ok) {
+                window.location.href = '/';
+            } else {
+                console.error('Logout failed');
+            }
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    });
+
+    async function checkSession() {
+        try {
+            const response = await fetch('/check-session');
+            if (response.ok) {
+                const data = await response.json();
+                if (!data.loggedIn) {
+                    window.location.href = 'login.html';
+                }
+            } else {
+                console.error('Failed to check session');
+            }
+        } catch (error) {
+            console.error('Error checking session:', error);
+        }
+    }
+
+    window.onload = checkSession;
+
+   /*  async function fetchUserSettings() {
+        try {
+            const response = await fetch('/user-settings');
+            if (response.ok) {
+                const settings = await response.json();
+                console.log('Fetched settings:', settings);
+                applySettings(settings);
+            } else {
+                console.error('Failed to fetch user settings');
+            }
+        } catch (error) {
+            console.error('Error fetching user settings:', error);
+        }
+    } 
+ */
+    class WebSocketManager {
+        constructor(url) {
+            this.url = url;
+            this.ws = null;
+            this.reconnectInterval = 5000; // 5 seconds
+            this.heartbeatInterval = 30000; // 30 seconds
+            this.messageQueue = [];
+            this.connect();
+        }
+
+        connect() {
+            this.ws = new WebSocket(this.url);
+
+            this.ws.onopen = () => {
+                console.log('Connected to server');
+               /*  this.sendQueuedMessages();
+                this.startHeartbeat(); */
+            };
+
+            this.ws.onmessage = (event) => {
+                console.log(`Message from server: ${event.data}`);
+                // Handle incoming messages
+            };
+
+            this.ws.onclose = () => {
+                console.log('Disconnected from server');
+                /* this.stopHeartbeat();
+                setTimeout(() => this.connect(), this.reconnectInterval); */
+            };
+
+            this.ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+        }
+
+        send(message) {
+            if (this.ws.readyState === WebSocket.OPEN) {
+                this.ws.send(message);
+            } /* else {
+                this.messageQueue.push(message);
+            } */
+        }
+
+        /* sendQueuedMessages() {
+            while (this.messageQueue.length > 0) {
+                this.ws.send(this.messageQueue.shift());
+            }
+        } */
+
+      /*   startHeartbeat() {
+            this.heartbeat = setInterval(() => {
+                if (this.ws.readyState === WebSocket.OPEN) {
+                    this.ws.send(JSON.stringify({ type: 'ping' }));
+                }
+            }, this.heartbeatInterval);
+        }
+
+        stopHeartbeat() {
+            clearInterval(this.heartbeat);
+        } */
+    }
+
+    // Usage
+    const wsManager = new WebSocketManager((window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host);
+
+    // Example of sending a message
+    document.getElementById('send').onclick = () => {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            // Send a JSON-formatted message
+            ws.send(JSON.stringify({ message: 'Hello Server!' }));
+        }
+    };
+
+    document.getElementById('disconnect').onclick = () => {
+      if (wsManager) {
+        wsManager.ws.close();
+      }
+    };
+
+    const ws = new WebSocket((window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host);
+
+    document.getElementById('faq-send').onclick = () => {
+        const question = document.getElementById('faq-input').value.trim();
+        if (question) {
+            ws.send(JSON.stringify({ type: 'faq', question }));
+            document.getElementById('faq-input').value = ''; // Clear input
+        }
+    };
+
+    ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'faq') {
+            const responseDiv = document.getElementById('faq-responses');
+            responseDiv.innerHTML += `<p>${data.response}</p>`;
+        }
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <h1>WebSocket Test</h1>
+    <button id="connect">Connect</button>
+    <button id="send">Send Message</button>
+    <button id="disconnect">Disconnect</button>
+    <div id="log"></div>
+
+    <script>
+        let ws;
+        const log = document.getElementById('log');
+
+        document.getElementById('connect').onclick = () => {
+            ws = new WebSocket((window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host);
+            ws.onopen = () => log.innerHTML += '<p>Connected to server</p>';
+            ws.onmessage = (event) => log.innerHTML += `<p>Message from server: ${event.data}</p>`;
+            ws.onclose = () => log.innerHTML += '<p>Disconnected from server</p>';
+        };
+
+        document.getElementById('send').onclick = () => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send('Hello Server ma connect ho gaya ab muje diconnect be kr du:)');
+            }
+        };
+
+        document.getElementById('disconnect').onclick = () => {
+            if (ws) {
+                ws.close();
+            }
+        };
+    </script>
+</body>
+</html>
