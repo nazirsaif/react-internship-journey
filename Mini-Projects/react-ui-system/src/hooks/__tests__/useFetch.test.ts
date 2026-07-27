@@ -3,7 +3,7 @@ import { useFetch } from '../useFetch';
 import { vi } from 'vitest';
 
 const mockFetch = vi.fn();
-global.fetch = mockFetch;
+vi.stubGlobal('fetch', mockFetch);
 
 describe('useFetch', () => {
   beforeEach(() => {
