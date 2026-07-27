@@ -355,9 +355,41 @@ ul {
 }
 
 .card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 1rem;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+.card-pad-sm { padding: var(--spacing-2); }
+.card-pad-md { padding: var(--spacing-4); }
+.card-pad-lg { padding: var(--spacing-6); }
+
+.card-hoverable {
+    transition: all 0.3s ease;
+}
+.card-hoverable:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-color: var(--primary-color);
+}
+
+.card-header {
+    margin-bottom: var(--spacing-4);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-4);
+}
+
+.card-body {
+    flex-grow: 1;
+}
+
+.card-footer {
+    margin-top: var(--spacing-4);
+    padding-top: var(--spacing-4);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
 }
 
 .feature-card {
