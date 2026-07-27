@@ -47,6 +47,11 @@ export function KanbanColumn({ id, title, cards }: KanbanColumnProps) {
           {cards.map(card => (
             <KanbanCard key={card.id} card={card} columnId={id} />
           ))}
+          {cards.length === 0 && (
+            <div style={{ textAlign: 'center', color: 'var(--text-muted)', marginTop: '2rem', fontSize: '0.875rem' }}>
+              No cards in this column
+            </div>
+          )}
         </SortableContext>
       </Card.Body>
     </Card>

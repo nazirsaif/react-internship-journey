@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   DndContext, 
   closestCorners, 
@@ -18,6 +18,12 @@ import { Button, useDebounce } from '@internal/ui-system';
 export function KanbanBoard() {
   const { state, dispatch } = useKanban();
   const columns = state.present.columns;
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearch = useDebounce(searchTerm, 300);
@@ -84,6 +90,22 @@ export function KanbanBoard() {
   };
 
   const [newTaskTitle, setNewTaskTitle] = useState('');
+
+  if (isLoading) {
+    return (
+      <div style={{ padding: '1rem' }}>
+        <div style={{ display: 'flex', gap: '1.5rem', height: '100%', minHeight: '600px', marginTop: '4rem' }}>
+          {[1, 2, 3].map(i => (
+            <div key={i} style={{ width: '300px', backgroundColor: 'var(--card-bg)', borderRadius: 'var(--radius-xl)', padding: '1rem', border: '1px solid var(--border-color)', opacity: 0.7 }}>
+              <div style={{ height: '2rem', backgroundColor: 'var(--border-color)', borderRadius: 'var(--radius-md)', marginBottom: '1rem' }} />
+              <div style={{ height: '80px', backgroundColor: 'var(--border-color)', borderRadius: 'var(--radius-md)', marginBottom: '0.5rem' }} />
+              <div style={{ height: '80px', backgroundColor: 'var(--border-color)', borderRadius: 'var(--radius-md)' }} />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem' }}>
