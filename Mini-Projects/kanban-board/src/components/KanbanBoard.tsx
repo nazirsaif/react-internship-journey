@@ -25,6 +25,15 @@ export function KanbanBoard() {
     return () => clearTimeout(timer);
   }, []);
 
+  const [isLightMode, setIsLightMode] = useState(false);
+  useEffect(() => {
+    if (isLightMode) {
+      document.body.classList.add('light-mode');
+    } else {
+      document.body.classList.remove('light-mode');
+    }
+  }, [isLightMode]);
+
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearch = useDebounce(searchTerm, 300);
 
@@ -152,6 +161,9 @@ export function KanbanBoard() {
               outline: 'none'
             }}
           />
+          <Button variant="outline" onClick={() => setIsLightMode(prev => !prev)}>
+            {isLightMode ? 'Dark Mode' : 'Light Mode'}
+          </Button>
           <Button variant="outline" onClick={() => dispatch({ type: 'UNDO' })}>Undo (Ctrl+Z)</Button>
           <Button variant="outline" onClick={() => dispatch({ type: 'REDO' })}>Redo (Ctrl+Shift+Z)</Button>
         </div>
