@@ -20,9 +20,9 @@ const cardVariants = cva('card', {
   },
 });
 
-type CardContextValue = {
+interface CardContextValue {
   padding: 'none' | 'sm' | 'md' | 'lg';
-};
+}
 
 const CardContext = createContext<CardContextValue | undefined>(undefined);
 
@@ -41,7 +41,7 @@ export interface CardProps
 const CardComponent = forwardRef<HTMLDivElement, CardProps>(
   ({ className, padding = 'md', hoverable, children, ...props }, ref) => {
     return (
-      <CardContext.Provider value={{ padding: padding || 'md' }}>
+      <CardContext.Provider value={{ padding: padding ?? 'md' }}>
         <div
           ref={ref}
           className={cn(cardVariants({ padding, hoverable, className }))}
