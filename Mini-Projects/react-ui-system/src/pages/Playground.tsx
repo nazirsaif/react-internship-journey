@@ -4,6 +4,7 @@ import { Badge } from '@components/ui/Badge';
 import { Card } from '@components/ui/Card';
 import { Modal } from '@components/ui/Modal';
 import { useIntersectionObserver } from '@hooks/useIntersectionObserver';
+import { LiveSearch } from '@components/features/LiveSearch';
 
 export const Playground: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -99,6 +100,14 @@ export const Playground: React.FC = () => {
           </div>
           <LazyImage src="https://picsum.photos/800/400" alt="Random placeholder" />
         </div>
+      </section>
+
+      <section style={{ marginBottom: '4rem' }}>
+        <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', borderBottom: '1px solid var(--border-color)' }}>Composed Feature: Live Search</h2>
+        <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>
+          Uses <code>useDebounce</code> to delay input, <code>useFetch</code> to query REST Countries API, and <code>useLocalStorage</code> to cache recent searches.
+        </p>
+        <LiveSearch />
       </section>
 
       <section style={{ marginBottom: '4rem' }}>
