@@ -8,12 +8,10 @@ export const Hero: React.FC = () => {
           <h1 className="hero-title">Build AI Applications Faster</h1>
           <p className="hero-subtitle">Deploy intelligent products with modern technology.</p>
           <div className="hero-buttons">
-            <a href="#start" className="btn btn-primary">
-              Start Free
+            <a href="/playground" className="btn btn-primary">
+              View Components
             </a>
-            <a href="#demo" className="btn btn-outline">
-              View Demo
-            </a>
+            <button className="btn btn-outline">Documentation</button>
           </div>
         </div>
         <div className="hero-illustration">
