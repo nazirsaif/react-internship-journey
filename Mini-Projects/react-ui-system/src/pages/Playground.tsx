@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@components/ui/Button';
 import { Badge } from '@components/ui/Badge';
 import { Card } from '@components/ui/Card';
 import { Modal } from '@components/ui/Modal';
+import { useIntersectionObserver } from '@hooks/useIntersectionObserver';
 
 export const Playground: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -90,24 +91,63 @@ export const Playground: React.FC = () => {
       </section>
 
       <section style={{ marginBottom: '4rem' }}>
+        <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', borderBottom: '1px solid var(--border-color)' }}>Lazy Loading (useIntersectionObserver)</h2>
+        <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>Scroll down to load the image dynamically when it enters the viewport.</p>
+        <div style={{ height: '300px', overflowY: 'auto', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', padding: '1rem', backgroundColor: 'var(--card-bg)' }}>
+          <div style={{ height: '500px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
+            Scroll down... 👇
+          </div>
+          <LazyImage src="https://picsum.photos/800/400" alt="Random placeholder" />
+        </div>
+      </section>
+
+      <section style={{ marginBottom: '4rem' }}>
         <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', borderBottom: '1px solid var(--border-color)' }}>Modal</h2>
-        <Button onClick={() => setIsModalOpen(true)}>Open Modal</Button>
+        <Button onClick={() => { setIsModalOpen(true); }}>Open Modal</Button>
+
 
         <Modal 
           isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => { setIsModalOpen(false); }}
           title="Delete Confirmation"
         >
           <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
             Are you sure you want to delete this item? This action cannot be undone and will permanently remove the data from our servers.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-            <Button variant="outline" onClick={() => setIsModalOpen(false)}>Cancel</Button>
-            <Button variant="danger" onClick={() => setIsModalOpen(false)}>Delete Permanently</Button>
+            <Button variant="outline" onClick={() => { setIsModalOpen(false); }}>Cancel</Button>
+            <Button variant="danger" onClick={() => { setIsModalOpen(false); }}>Delete Permanently</Button>
           </div>
         </Modal>
       </section>
 
+    </div>
+  );
+};
+
+const LazyImage = ({ src, alt }: { src: string; alt: string }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const entry = useIntersectionObserver(ref, { freezeOnceVisible: true, threshold: 0.1 });
+  const isVisible = !!entry?.isIntersecting;
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        minHeight: '200px',
+        backgroundColor: 'var(--border-color)',
+        borderRadius: 'var(--radius-md)',
+        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      {isVisible ? (
+        <img src={src} alt={alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+      ) : (
+        <span style={{ color: 'var(--text-muted)' }}>Loading...</span>
+      )}
     </div>
   );
 };
