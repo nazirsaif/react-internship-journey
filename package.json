@@ -1,0 +1,8 @@
+{
+  "name": "react-internship-journey",
+  "private": true,
+  "workspaces": [
+    "Mini-Projects/react-ui-system",
+    "Mini-Projects/kanban-board"
+  ]
+}
