@@ -31,6 +31,10 @@ export function KanbanCard({ card, columnId }: KanbanCardProps) {
     },
   });
 
+  const isOverdue = card.dueDate 
+    ? new Date(card.dueDate) < new Date(new Date().setHours(0,0,0,0)) 
+    : false;
+
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -85,6 +89,16 @@ export function KanbanCard({ card, columnId }: KanbanCardProps) {
                 </span>
               );
             })}
+          </div>
+        )}
+        {card.dueDate && (
+          <div style={{ 
+            marginTop: '0.5rem', 
+            fontSize: '0.75rem', 
+            color: isOverdue ? '#ef4444' : 'var(--text-muted)',
+            fontWeight: isOverdue ? 600 : 400
+          }}>
+            Due: {card.dueDate} {isOverdue && '(Overdue)'}
           </div>
         )}
       </Card>

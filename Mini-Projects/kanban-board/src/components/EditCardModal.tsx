@@ -9,6 +9,7 @@ const editCardSchema = z.object({
   title: z.string().min(1, 'Title is required').max(100, 'Title is too long'),
   description: z.string().max(500, 'Description is too long').optional(),
   labels: z.array(z.string()).optional(),
+  dueDate: z.string().optional().nullable(),
 });
 
 type EditCardFormValues = z.infer<typeof editCardSchema>;
@@ -27,6 +28,7 @@ export function EditCardModal({ isOpen, onClose, card, onSave }: EditCardModalPr
       title: card.title,
       description: card.description || '',
       labels: card.labels || [],
+      dueDate: card.dueDate || '',
     }
   });
 
@@ -96,6 +98,23 @@ export function EditCardModal({ isOpen, onClose, card, onSave }: EditCardModalPr
               </label>
             ))}
           </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <label htmlFor="dueDate" style={{ fontSize: '0.875rem', fontWeight: 500 }}>Due Date</label>
+          <input
+            id="dueDate"
+            type="date"
+            {...register('dueDate')}
+            style={{
+              padding: '0.5rem',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--border-color)',
+              backgroundColor: 'var(--bg-color)',
+              color: 'var(--text-main)',
+              outline: 'none'
+            }}
+          />
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
