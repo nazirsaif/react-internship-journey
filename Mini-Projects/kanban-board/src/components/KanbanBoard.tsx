@@ -12,12 +12,27 @@ import {
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { KanbanColumn } from './KanbanColumn';
 import { useKanban } from '../KanbanContext';
-import type { ColumnId } from '../types';
-import { Button } from '@internal/ui-system';
+import type { ColumnId, CardItem } from '../types';
+import { Button, useDebounce } from '@internal/ui-system';
 
 export function KanbanBoard() {
   const { state, dispatch } = useKanban();
   const columns = state.present.columns;
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearch = useDebounce(searchTerm, 300);
+
+  const filteredColumns = Object.entries(columns).reduce((acc, [columnId, cards]) => {
+    if (!debouncedSearch) {
+      acc[columnId as ColumnId] = cards;
+    } else {
+      acc[columnId as ColumnId] = cards.filter(card => 
+        card.title.toLowerCase().includes(debouncedSearch.toLowerCase()) || 
+        (card.description && card.description.toLowerCase().includes(debouncedSearch.toLowerCase()))
+      );
+    }
+    return acc;
+  }, {} as Record<ColumnId, CardItem[]>);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -101,6 +116,20 @@ export function KanbanBoard() {
           Add Task
         </Button>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.5rem' }}>
+          <input 
+            type="text" 
+            value={searchTerm} 
+            onChange={e => setSearchTerm(e.target.value)}
+            placeholder="Search cards..."
+            style={{ 
+              padding: '0.75rem 1rem', 
+              borderRadius: 'var(--radius-md)', 
+              border: '1px solid var(--border-color)',
+              backgroundColor: 'var(--bg-color)',
+              color: 'var(--text-main)',
+              outline: 'none'
+            }}
+          />
           <Button variant="outline" onClick={() => dispatch({ type: 'UNDO' })}>Undo (Ctrl+Z)</Button>
           <Button variant="outline" onClick={() => dispatch({ type: 'REDO' })}>Redo (Ctrl+Shift+Z)</Button>
         </div>
@@ -113,9 +142,9 @@ export function KanbanBoard() {
         onDragEnd={handleDragEnd}
       >
         <div style={{ display: 'flex', gap: '1.5rem', height: '100%', minHeight: '600px' }}>
-          <KanbanColumn id="todo" title="To Do" cards={columns['todo']} />
-          <KanbanColumn id="in-progress" title="In Progress" cards={columns['in-progress']} />
-          <KanbanColumn id="done" title="Done" cards={columns['done']} />
+          <KanbanColumn id="todo" title="To Do" cards={filteredColumns['todo']} />
+          <KanbanColumn id="in-progress" title="In Progress" cards={filteredColumns['in-progress']} />
+          <KanbanColumn id="done" title="Done" cards={filteredColumns['done']} />
         </div>
       </DndContext>
     </div>
