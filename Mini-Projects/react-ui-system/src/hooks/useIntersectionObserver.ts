@@ -17,10 +17,11 @@ export function useIntersectionObserver(
   const frozen = entry?.isIntersecting && freezeOnceVisible;
 
   useEffect(() => {
-    const node = elementRef?.current;
+    const node = elementRef.current;
     const hasIOSupport = !!window.IntersectionObserver;
 
-    if (!hasIOSupport || frozen || !node) return;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (!hasIOSupport || frozen || node === null) return;
 
     const observerParams = { threshold, root, rootMargin };
     const observer = new IntersectionObserver(([obEntry]) => {
@@ -32,7 +33,7 @@ export function useIntersectionObserver(
     return () => {
       observer.disconnect();
     };
-  }, [elementRef?.current, JSON.stringify(threshold), root, rootMargin, frozen]);
+  }, [elementRef, threshold, root, rootMargin, frozen]);
 
   return entry;
 }

@@ -13,6 +13,7 @@ export function useFetch<T>(url: string): UseFetchResult<T> {
 
   useEffect(() => {
     if (!url) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoading(false);
       return;
     }
@@ -26,7 +27,7 @@ export function useFetch<T>(url: string): UseFetchResult<T> {
       try {
         const response = await fetch(url, { signal: abortController.signal });
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`HTTP error! status: ${String(response.status)}`);
         }
         
         const result = (await response.json()) as T;

@@ -26,7 +26,7 @@ export const LiveSearch: React.FC = () => {
     setSearchTerm(e.target.value);
   };
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
+  const handleSearchSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (searchTerm && !recentSearches.includes(searchTerm)) {
       setRecentSearches(prev => [searchTerm, ...prev].slice(0, 5)); // Keep last 5
@@ -60,7 +60,7 @@ export const LiveSearch: React.FC = () => {
             {recentSearches.map(term => (
               <button
                 key={term}
-                onClick={() => setSearchTerm(term)}
+                onClick={() => { setSearchTerm(term); }}
                 style={{
                   background: 'var(--border-color)',
                   border: 'none',
