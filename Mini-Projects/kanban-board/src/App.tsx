@@ -1,6 +1,9 @@
-import { Profiler, type ProfilerOnRenderCallback } from 'react';
+import { Profiler, type ProfilerOnRenderCallback, Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { KanbanProvider } from './KanbanContext';
 import { KanbanBoard } from './components/KanbanBoard';
+
+const Playground = lazy(() => import('./pages/Playground'));
 
 const onRenderCallback: ProfilerOnRenderCallback = (
   id, 
@@ -14,14 +17,29 @@ const onRenderCallback: ProfilerOnRenderCallback = (
 
 function App() {
   return (
-    <div style={{ minHeight: '100vh', padding: '2rem' }}>
-      <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>Kanban Board</h1>
-      <Profiler id="KanbanApp" onRender={onRenderCallback}>
-        <KanbanProvider>
-          <KanbanBoard />
-        </KanbanProvider>
-      </Profiler>
-    </div>
+    <BrowserRouter>
+      <div style={{ minHeight: '100vh', padding: '2rem' }}>
+        <h1 style={{ textAlign: 'center', marginBottom: '1rem' }}>Kanban Board</h1>
+        <nav style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <Link to="/" style={{ marginRight: '1rem' }}>Board</Link>
+          <Link to="/playground">Playground</Link>
+        </nav>
+        <Routes>
+          <Route path="/" element={
+            <Profiler id="KanbanApp" onRender={onRenderCallback}>
+              <KanbanProvider>
+                <KanbanBoard />
+              </KanbanProvider>
+            </Profiler>
+          } />
+          <Route path="/playground" element={
+            <Suspense fallback={<div>Loading Playground...</div>}>
+              <Playground />
+            </Suspense>
+          } />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
