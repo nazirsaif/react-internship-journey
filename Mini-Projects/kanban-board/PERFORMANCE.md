@@ -1,5 +1,7 @@
 # Performance Optimization Report
 
+**Live Demo**: [https://nazirsaif.github.io/react-internship-journey/](https://nazirsaif.github.io/react-internship-journey/)
+
 This document records the baseline and post-optimization performance metrics for the Kanban Board project.
 
 ## 1. Re-render Optimization (React.memo & useCallback)

@@ -12,3 +12,4 @@ Projects:
 3. Dashboard Application
 4. API Based Applications
 5. Final Capstone Project
+6. Kanban Board: [Live Demo](https://nazirsaif.github.io/react-internship-journey/)
