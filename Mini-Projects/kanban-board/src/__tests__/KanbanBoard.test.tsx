@@ -37,7 +37,7 @@ describe('KanbanBoard Integration', () => {
   });
 
   it('can edit a card with labels and due date', async () => {
-    const user = userEvent.setup();
+
     renderBoard();
 
     await waitFor(() => {
