@@ -1,20 +1,16 @@
-import { Profiler } from 'react';
+import { Profiler, type ProfilerOnRenderCallback } from 'react';
 import { KanbanProvider } from './KanbanContext';
 import { KanbanBoard } from './components/KanbanBoard';
 
-function onRenderCallback(
-  id: string, 
-  phase: "mount" | "update", 
-  actualDuration: number, 
-  baseDuration: number, 
-  startTime: number, 
-  commitTime: number, 
-  interactions: Set<any>
-) {
+const onRenderCallback: ProfilerOnRenderCallback = (
+  id, 
+  phase, 
+  actualDuration
+) => {
   if (actualDuration > 5) {
     console.log(`[Profiler] ${id} - ${phase} took ${actualDuration.toFixed(2)}ms`);
   }
-}
+};
 
 function App() {
   return (

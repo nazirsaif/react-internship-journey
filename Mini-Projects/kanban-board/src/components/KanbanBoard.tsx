@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { 
   DndContext, 
   closestCorners, 
@@ -56,7 +56,7 @@ export function KanbanBoard() {
     })
   );
 
-  const handleDragOver = (event: DragOverEvent) => {
+  const handleDragOver = useCallback((event: DragOverEvent) => {
     const { active, over } = event;
     if (!over) return;
 
@@ -67,14 +67,9 @@ export function KanbanBoard() {
 
     const isActiveAColumn = active.data.current?.type === 'Column';
     if (isActiveAColumn) return;
-    
-    // We handle the cross-column moves in DragOver for smoother sorting UX if needed,
-    // but the reducer handles both same-column and cross-column moves in MOVE_CARD.
-    // For a simple implementation, handling it in dragEnd is enough, but optimistic updates
-    // during drag require more complex state. We'll dispatch MOVE_CARD on dragEnd.
-  };
+  }, []);
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
     if (!over) return;
 
@@ -96,7 +91,15 @@ export function KanbanBoard() {
         } 
       });
     }
-  };
+  }, [dispatch]);
+
+  const onDeleteCard = useCallback((cardId: string, columnId: ColumnId) => {
+    dispatch({ type: 'DELETE_CARD', payload: { cardId, columnId } });
+  }, [dispatch]);
+
+  const onEditCard = useCallback((columnId: ColumnId, cardId: string, data: Partial<CardItem>) => {
+    dispatch({ type: 'EDIT_CARD', payload: { columnId, cardId, data } });
+  }, [dispatch]);
 
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
@@ -188,9 +191,9 @@ export function KanbanBoard() {
         onDragEnd={handleDragEnd}
       >
         <div style={{ display: 'flex', gap: '1.5rem', height: '100%', minHeight: '600px' }}>
-          <KanbanColumn id="todo" title="To Do" cards={filteredColumns['todo']} />
-          <KanbanColumn id="in-progress" title="In Progress" cards={filteredColumns['in-progress']} />
-          <KanbanColumn id="done" title="Done" cards={filteredColumns['done']} />
+          <KanbanColumn id="todo" title="To Do" cards={filteredColumns['todo']} onDeleteCard={onDeleteCard} onEditCard={onEditCard} />
+          <KanbanColumn id="in-progress" title="In Progress" cards={filteredColumns['in-progress']} onDeleteCard={onDeleteCard} onEditCard={onEditCard} />
+          <KanbanColumn id="done" title="Done" cards={filteredColumns['done']} onDeleteCard={onDeleteCard} onEditCard={onEditCard} />
         </div>
       </DndContext>
     </div>

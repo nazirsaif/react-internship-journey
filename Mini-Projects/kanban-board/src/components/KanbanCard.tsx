@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Card, Button } from '@internal/ui-system';
 import type { CardItem, ColumnId } from '../types';
 import { PREDEFINED_LABELS } from '../types';
-import { useKanban } from '../KanbanContext';
 import { EditCardModal } from './EditCardModal';
 
 interface KanbanCardProps {
   card: CardItem;
   columnId: ColumnId;
+  onDeleteCard: (cardId: string, columnId: ColumnId) => void;
+  onEditCard: (columnId: ColumnId, cardId: string, data: Partial<CardItem>) => void;
 }
 
-export function KanbanCard({ card, columnId }: KanbanCardProps) {
-  const { dispatch } = useKanban();
+export const KanbanCard = memo(function KanbanCard({ card, columnId, onDeleteCard, onEditCard }: KanbanCardProps) {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const {
     attributes,
@@ -66,7 +66,7 @@ export function KanbanCard({ card, columnId }: KanbanCardProps) {
               aria-label="Delete task"
               onClick={(e: React.MouseEvent) => {
                 e.stopPropagation(); // prevent drag start
-                dispatch({ type: 'DELETE_CARD', payload: { cardId: card.id, columnId: columnId as any } });
+                onDeleteCard(card.id, columnId);
               }}
             >
               X
@@ -110,9 +110,9 @@ export function KanbanCard({ card, columnId }: KanbanCardProps) {
           isOpen={isEditOpen}
           onClose={() => setIsEditOpen(false)}
           card={card}
-          onSave={(data) => dispatch({ type: 'EDIT_CARD', payload: { columnId: columnId as ColumnId, cardId: card.id, data } })}
+          onSave={(data) => onEditCard(columnId, card.id, data)}
         />
       )}
     </div>
   );
-}
+});

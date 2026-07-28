@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useMemo } from 'react';
 import type { KanbanState, HistoryState, KanbanAction, ColumnId } from './types';
 import { useLocalStorage } from '@internal/ui-system';
 
@@ -206,8 +206,10 @@ export function KanbanProvider({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  const contextValue = useMemo(() => ({ state, dispatch }), [state, dispatch]);
+
   return (
-    <KanbanContext.Provider value={{ state, dispatch }}>
+    <KanbanContext.Provider value={contextValue}>
       {children}
     </KanbanContext.Provider>
   );

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Card } from '@internal/ui-system';
@@ -8,9 +9,11 @@ interface KanbanColumnProps {
   id: ColumnId;
   title: string;
   cards: CardItem[];
+  onDeleteCard: (cardId: string, columnId: ColumnId) => void;
+  onEditCard: (columnId: ColumnId, cardId: string, data: Partial<CardItem>) => void;
 }
 
-export function KanbanColumn({ id, title, cards }: KanbanColumnProps) {
+export const KanbanColumn = memo(function KanbanColumn({ id, title, cards, onDeleteCard, onEditCard }: KanbanColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: id,
     data: {
@@ -45,7 +48,7 @@ export function KanbanColumn({ id, title, cards }: KanbanColumnProps) {
       >
         <SortableContext items={cards.map(c => c.id)} strategy={verticalListSortingStrategy}>
           {cards.map(card => (
-            <KanbanCard key={card.id} card={card} columnId={id} />
+            <KanbanCard key={card.id} card={card} columnId={id} onDeleteCard={onDeleteCard} onEditCard={onEditCard} />
           ))}
           {cards.length === 0 && (
             <div style={{ textAlign: 'center', color: 'var(--text-muted)', marginTop: '2rem', fontSize: '0.875rem' }}>
@@ -56,4 +59,4 @@ export function KanbanColumn({ id, title, cards }: KanbanColumnProps) {
       </Card.Body>
     </Card>
   );
-}
+});
