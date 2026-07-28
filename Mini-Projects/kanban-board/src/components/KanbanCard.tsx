@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react';
+import React, { useState, memo, useMemo } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Card, Button } from '@internal/ui-system';
@@ -31,9 +31,11 @@ export const KanbanCard = memo(function KanbanCard({ card, columnId, onDeleteCar
     },
   });
 
-  const isOverdue = card.dueDate 
-    ? new Date(card.dueDate) < new Date(new Date().setHours(0,0,0,0)) 
-    : false;
+  const isOverdue = useMemo(() => {
+    return card.dueDate 
+      ? new Date(card.dueDate) < new Date(new Date().setHours(0,0,0,0)) 
+      : false;
+  }, [card.dueDate]);
 
   const style = {
     transform: CSS.Transform.toString(transform),

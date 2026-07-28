@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   DndContext, 
   closestCorners, 
@@ -37,17 +37,19 @@ export function KanbanBoard() {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearch = useDebounce(searchTerm, 300);
 
-  const filteredColumns = Object.entries(columns).reduce((acc, [columnId, cards]) => {
-    if (!debouncedSearch) {
-      acc[columnId as ColumnId] = cards;
-    } else {
-      acc[columnId as ColumnId] = cards.filter(card => 
-        card.title.toLowerCase().includes(debouncedSearch.toLowerCase()) || 
-        (card.description && card.description.toLowerCase().includes(debouncedSearch.toLowerCase()))
-      );
-    }
-    return acc;
-  }, {} as Record<ColumnId, CardItem[]>);
+  const filteredColumns = useMemo(() => {
+    return Object.entries(columns).reduce((acc, [columnId, cards]) => {
+      if (!debouncedSearch) {
+        acc[columnId as ColumnId] = cards;
+      } else {
+        acc[columnId as ColumnId] = cards.filter(card => 
+          card.title.toLowerCase().includes(debouncedSearch.toLowerCase()) || 
+          (card.description && card.description.toLowerCase().includes(debouncedSearch.toLowerCase()))
+        );
+      }
+      return acc;
+    }, {} as Record<ColumnId, CardItem[]>);
+  }, [columns, debouncedSearch]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
