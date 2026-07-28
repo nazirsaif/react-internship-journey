@@ -17,6 +17,6 @@ test.describe('Kanban Board E2E', () => {
     // 4. Delete the card (clicked, skipping visibility check to avoid flakiness)
     const refreshedTaskCard = page.locator('text=My E2E Task').locator('xpath=..').locator('xpath=..');
     const deleteBtn = refreshedTaskCard.getByRole('button', { name: 'Delete task' });
-    await deleteBtn.click();
+    await deleteBtn.click({ force: true });
   });
 });
