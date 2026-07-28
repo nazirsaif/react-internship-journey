@@ -166,6 +166,16 @@ export function KanbanBoard() {
           <Button variant="outline" onClick={() => setIsLightMode(prev => !prev)}>
             {isLightMode ? 'Dark Mode' : 'Light Mode'}
           </Button>
+          <Button variant="outline" onClick={() => {
+            const newCards = Array.from({ length: 1000 }).map((_, i) => ({
+              id: `seeded-${Date.now()}-${i}`,
+              title: `Seeded Task ${i + 1}`,
+              description: 'This is a synthetic task for performance testing.',
+            }));
+            dispatch({ type: 'SEED_DATA', payload: { columns: { ...columns, 'todo': [...columns['todo'], ...newCards] } } });
+          }}>
+            Seed 1000 Cards
+          </Button>
           <Button variant="outline" onClick={() => dispatch({ type: 'UNDO' })}>Undo (Ctrl+Z)</Button>
           <Button variant="outline" onClick={() => dispatch({ type: 'REDO' })}>Redo (Ctrl+Shift+Z)</Button>
         </div>

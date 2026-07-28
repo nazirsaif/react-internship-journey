@@ -44,6 +44,14 @@ export function kanbanReducer(state: HistoryState, action: KanbanAction): Histor
         future: []
       };
     }
+    case 'SEED_DATA': {
+      const { columns } = action.payload;
+      return {
+        past: [...past, present],
+        present: { ...present, columns },
+        future: []
+      };
+    }
     case 'ADD_CARD': {
       const { columnId, card } = action.payload;
       const newPresent = {

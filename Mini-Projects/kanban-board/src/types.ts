@@ -29,6 +29,7 @@ export interface HistoryState {
 export type KanbanAction =
   | { type: 'ADD_CARD'; payload: { columnId: ColumnId; card: CardItem } }
   | { type: 'MOVE_CARD'; payload: { activeId: CardId; overId: CardId | null; overColumnId: ColumnId } }
+  | { type: 'SEED_DATA'; payload: { columns: Record<ColumnId, CardItem[]> } }
   | { type: 'DELETE_CARD'; payload: { cardId: CardId; columnId: ColumnId } }
   | { type: 'EDIT_CARD'; payload: { columnId: ColumnId; cardId: CardId; data: Partial<CardItem> } }
   | { type: 'UNDO' }
