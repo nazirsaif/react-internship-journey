@@ -47,7 +47,7 @@ export const KanbanCard = memo(function KanbanCard({ card, columnId, onDeleteCar
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Card hoverable padding="sm" style={{ marginBottom: '0.5rem', cursor: 'grab', backgroundColor: 'var(--bg-color)' }}>
+      <Card hoverable padding="sm" style={{ marginBottom: 0, cursor: 'grab', backgroundColor: 'var(--bg-color)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span>{card.title}</span>
           <div style={{ display: 'flex', gap: '0.25rem' }}>
