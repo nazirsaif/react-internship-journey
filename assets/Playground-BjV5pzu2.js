@@ -1,0 +1,1 @@
+import{t as e}from"./index-C_fHhq5M.js";var t=e();function n(){return(0,t.jsxs)(`div`,{style:{padding:`2rem`},children:[(0,t.jsx)(`h1`,{children:`Playground`}),(0,t.jsx)(`p`,{children:`This is a lazily loaded secondary route.`})]})}export{n as default};
