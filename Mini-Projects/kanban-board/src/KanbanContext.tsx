@@ -2,7 +2,7 @@ import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import type { KanbanState, HistoryState, KanbanAction, ColumnId } from './types';
 import { useLocalStorage } from '@internal/ui-system';
 
-const initialKanbanState: KanbanState = {
+export const initialKanbanState: KanbanState = {
   columns: {
     'todo': [
       { id: '1', title: 'Task 1' },
@@ -13,7 +13,7 @@ const initialKanbanState: KanbanState = {
   }
 };
 
-function kanbanReducer(state: HistoryState, action: KanbanAction): HistoryState {
+export function kanbanReducer(state: HistoryState, action: KanbanAction): HistoryState {
   const { past, present, future } = state;
 
   switch (action.type) {
@@ -179,7 +179,8 @@ export function KanbanProvider({ children }: { children: React.ReactNode }) {
   // Persist the present state whenever it changes
   useEffect(() => {
     setStoredState(state.present);
-  }, [state.present, setStoredState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.present]);
 
   // Global Keyboard listener for Undo/Redo
   useEffect(() => {
