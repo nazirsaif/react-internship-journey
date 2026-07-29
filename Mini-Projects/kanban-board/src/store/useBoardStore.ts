@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { KanbanState, HistoryState, CardItem, ColumnId, CardId } from '../types';
 
 export const initialKanbanState: KanbanState = {
@@ -22,10 +23,12 @@ interface BoardStore extends HistoryState {
   redo: () => void;
 }
 
-export const useBoardStore = create<BoardStore>((set) => ({
-  past: [],
-  present: initialKanbanState,
-  future: [],
+export const useBoardStore = create<BoardStore>()(
+  persist(
+    (set) => ({
+      past: [],
+      present: initialKanbanState,
+      future: [],
 
   addCard: (columnId, card) => set((state) => {
     const { past, present } = state;
@@ -171,4 +174,14 @@ export const useBoardStore = create<BoardStore>((set) => ({
       future: newFuture
     };
   }),
-}));
+    }),
+    {
+      name: 'kanban-board-state',
+      partialize: (state) => state.present as any,
+      merge: (persistedState: any, currentState) => ({
+        ...currentState,
+        present: { ...currentState.present, ...persistedState },
+      }),
+    }
+  )
+);
