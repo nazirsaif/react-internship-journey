@@ -14,6 +14,7 @@ export interface CardItem {
   description?: string;
   labels?: string[];
   dueDate?: string | null;
+  columnId: ColumnId;
 }
 
 export interface KanbanState {
