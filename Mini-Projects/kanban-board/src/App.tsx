@@ -1,6 +1,5 @@
 import { Profiler, type ProfilerOnRenderCallback, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import { KanbanProvider } from './KanbanContext';
 import { KanbanBoard } from './components/KanbanBoard';
 
 const Playground = lazy(() => import('./pages/Playground'));
@@ -27,9 +26,7 @@ function App() {
         <Routes>
           <Route path="/" element={
             <Profiler id="KanbanApp" onRender={onRenderCallback}>
-              <KanbanProvider>
-                <KanbanBoard />
-              </KanbanProvider>
+              <KanbanBoard />
             </Profiler>
           } />
           <Route path="/playground" element={

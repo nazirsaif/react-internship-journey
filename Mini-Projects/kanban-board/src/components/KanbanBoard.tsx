@@ -11,19 +11,41 @@ import {
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { KanbanColumn } from './KanbanColumn';
-import { useKanban } from '../KanbanContext';
 import type { ColumnId, CardItem } from '../types';
+import { useBoardStore } from '../store/useBoardStore';
 import { Button, useDebounce } from '@internal/ui-system';
 
 export function KanbanBoard() {
-  const { state, dispatch } = useKanban();
-  const columns = state.present.columns;
+  const columns = useBoardStore(state => state.present.columns);
+  const moveCard = useBoardStore(state => state.moveCard);
+  const deleteCard = useBoardStore(state => state.deleteCard);
+  const editCard = useBoardStore(state => state.editCard);
+  const addCard = useBoardStore(state => state.addCard);
+  const seedData = useBoardStore(state => state.seedData);
+  const undo = useBoardStore(state => state.undo);
+  const redo = useBoardStore(state => state.redo);
+  
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 500);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+        if (e.shiftKey) {
+          redo();
+        } else {
+          undo();
+        }
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [undo, redo]);
 
   const [isLightMode, setIsLightMode] = useState(false);
   useEffect(() => {
@@ -84,24 +106,17 @@ export function KanbanBoard() {
     const overColumnId = isOverAColumn ? overId : over.data.current?.columnId;
 
     if (overColumnId) {
-      dispatch({ 
-        type: 'MOVE_CARD', 
-        payload: { 
-          activeId, 
-          overId: isOverAColumn ? null : overId, 
-          overColumnId: overColumnId as ColumnId 
-        } 
-      });
+      moveCard(activeId, isOverAColumn ? null : overId, overColumnId as ColumnId);
     }
-  }, [dispatch]);
+  }, [moveCard]);
 
   const onDeleteCard = useCallback((cardId: string, columnId: ColumnId) => {
-    dispatch({ type: 'DELETE_CARD', payload: { cardId, columnId } });
-  }, [dispatch]);
+    deleteCard(columnId, cardId);
+  }, [deleteCard]);
 
   const onEditCard = useCallback((columnId: ColumnId, cardId: string, data: Partial<CardItem>) => {
-    dispatch({ type: 'EDIT_CARD', payload: { columnId, cardId, data } });
-  }, [dispatch]);
+    editCard(columnId, cardId, data);
+  }, [editCard]);
 
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
@@ -141,13 +156,7 @@ export function KanbanBoard() {
         />
         <Button onClick={() => {
           if (!newTaskTitle.trim()) return;
-          dispatch({ 
-            type: 'ADD_CARD', 
-            payload: { 
-              columnId: 'todo', 
-              card: { id: Date.now().toString(), title: newTaskTitle } 
-            } 
-          });
+          addCard('todo', { id: Date.now().toString(), title: newTaskTitle });
           setNewTaskTitle('');
         }}>
           Add Task
@@ -177,12 +186,12 @@ export function KanbanBoard() {
               title: `Seeded Task ${i + 1}`,
               description: 'This is a synthetic task for performance testing.',
             }));
-            dispatch({ type: 'SEED_DATA', payload: { columns: { ...columns, 'todo': [...columns['todo'], ...newCards] } } });
+            seedData({ ...columns, 'todo': [...columns['todo'], ...newCards] });
           }}>
             Seed 1000 Cards
           </Button>
-          <Button variant="outline" onClick={() => dispatch({ type: 'UNDO' })}>Undo (Ctrl+Z)</Button>
-          <Button variant="outline" onClick={() => dispatch({ type: 'REDO' })}>Redo (Ctrl+Shift+Z)</Button>
+          <Button variant="outline" onClick={() => undo()}>Undo (Ctrl+Z)</Button>
+          <Button variant="outline" onClick={() => redo()}>Redo (Ctrl+Shift+Z)</Button>
         </div>
       </div>
 

@@ -1,14 +1,11 @@
 import { render, screen, waitFor, within, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { KanbanBoard } from '../components/KanbanBoard';
-import { KanbanProvider } from '../KanbanContext';
 
 describe('KanbanBoard Integration', () => {
   const renderBoard = () => {
     return render(
-      <KanbanProvider>
-        <KanbanBoard />
-      </KanbanProvider>
+      <KanbanBoard />
     );
   };
 
