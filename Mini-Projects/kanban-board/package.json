@@ -18,6 +18,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^5.5.7",
     "@internal/ui-system": "*",
+    "@tanstack/react-query": "^5.101.4",
     "@tanstack/react-virtual": "^3.14.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
