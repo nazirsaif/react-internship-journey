@@ -10,27 +10,132 @@ import {
   type DragOverEvent
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { KanbanColumn } from './KanbanColumn';
 import type { ColumnId, CardItem } from '../types';
 import { useBoardStore } from '../store/useBoardStore';
 import { Button, useDebounce } from '@internal/ui-system';
 
+const API_URL = 'http://localhost:3001/cards';
+
 export function KanbanBoard() {
-  const columns = useBoardStore(state => state.present.columns);
-  const moveCard = useBoardStore(state => state.moveCard);
-  const deleteCard = useBoardStore(state => state.deleteCard);
-  const editCard = useBoardStore(state => state.editCard);
-  const addCard = useBoardStore(state => state.addCard);
-  const seedData = useBoardStore(state => state.seedData);
+  const queryClient = useQueryClient();
+  
+  // UI State from Zustand
+  const { searchTerm, isLightMode } = useBoardStore(state => state.present);
+  const setSearchTerm = useBoardStore(state => state.setSearchTerm);
+  const setIsLightMode = useBoardStore(state => state.setIsLightMode);
   const undo = useBoardStore(state => state.undo);
   const redo = useBoardStore(state => state.redo);
   
-  const [isLoading, setIsLoading] = useState(true);
+  const debouncedSearch = useDebounce(searchTerm, 300);
+  const [newTaskTitle, setNewTaskTitle] = useState('');
 
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 500);
-    return () => clearTimeout(timer);
-  }, []);
+  // Fetch Cards
+  const { data: cards = [], isLoading, isError, error } = useQuery<CardItem[]>({
+    queryKey: ['cards'],
+    queryFn: async () => {
+      const res = await fetch(API_URL);
+      if (!res.ok) throw new Error('Failed to fetch cards');
+      return res.json();
+    }
+  });
+
+  // Mutations
+  const addMutation = useMutation({
+    mutationFn: async (newCard: CardItem) => {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newCard)
+      });
+      if (!res.ok) throw new Error('Failed to add card');
+      return res.json();
+    },
+    onMutate: async (newCard) => {
+      await queryClient.cancelQueries({ queryKey: ['cards'] });
+      const previousCards = queryClient.getQueryData<CardItem[]>(['cards']);
+      queryClient.setQueryData<CardItem[]>(['cards'], old => [...(old || []), newCard]);
+      return { previousCards };
+    },
+    onError: (err, newCard, context) => {
+      queryClient.setQueryData(['cards'], context?.previousCards);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['cards'] });
+    }
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, ...updates }: Partial<CardItem> & { id: string }) => {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+      });
+      if (!res.ok) throw new Error('Failed to update card');
+      return res.json();
+    },
+    onMutate: async (variables) => {
+      await queryClient.cancelQueries({ queryKey: ['cards'] });
+      const previousCards = queryClient.getQueryData<CardItem[]>(['cards']);
+      queryClient.setQueryData<CardItem[]>(['cards'], old => 
+        (old || []).map(card => card.id === variables.id ? { ...card, ...variables } : card)
+      );
+      return { previousCards };
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['cards'], context?.previousCards);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['cards'] });
+    }
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete card');
+      return res.json();
+    },
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ['cards'] });
+      const previousCards = queryClient.getQueryData<CardItem[]>(['cards']);
+      queryClient.setQueryData<CardItem[]>(['cards'], old => (old || []).filter(card => card.id !== id));
+      return { previousCards };
+    },
+    onError: (err, id, context) => {
+      queryClient.setQueryData(['cards'], context?.previousCards);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['cards'] });
+    }
+  });
+
+  const filteredColumns = useMemo(() => {
+    const cols: Record<ColumnId, CardItem[]> = {
+      'todo': [],
+      'in-progress': [],
+      'done': []
+    };
+    
+    cards.forEach(card => {
+      if (!cols[card.columnId]) return;
+      if (!debouncedSearch) {
+        cols[card.columnId].push(card);
+      } else {
+        const lowerSearch = debouncedSearch.toLowerCase();
+        if (
+          card.title.toLowerCase().includes(lowerSearch) || 
+          (card.description && card.description.toLowerCase().includes(lowerSearch))
+        ) {
+          cols[card.columnId].push(card);
+        }
+      }
+    });
+    
+    return cols;
+  }, [cards, debouncedSearch]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -47,7 +152,6 @@ export function KanbanBoard() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [undo, redo]);
 
-  const [isLightMode, setIsLightMode] = useState(false);
   useEffect(() => {
     if (isLightMode) {
       document.body.classList.add('light-mode');
@@ -56,41 +160,13 @@ export function KanbanBoard() {
     }
   }, [isLightMode]);
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearch = useDebounce(searchTerm, 300);
-
-  const filteredColumns = useMemo(() => {
-    return Object.entries(columns).reduce((acc, [columnId, cards]) => {
-      if (!debouncedSearch) {
-        acc[columnId as ColumnId] = cards;
-      } else {
-        acc[columnId as ColumnId] = cards.filter(card => 
-          card.title.toLowerCase().includes(debouncedSearch.toLowerCase()) || 
-          (card.description && card.description.toLowerCase().includes(debouncedSearch.toLowerCase()))
-        );
-      }
-      return acc;
-    }, {} as Record<ColumnId, CardItem[]>);
-  }, [columns, debouncedSearch]);
-
   const sensors = useSensors(
     useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
   const handleDragOver = useCallback((event: DragOverEvent) => {
-    const { active, over } = event;
-    if (!over) return;
-
-    const activeId = active.id as string;
-    const overId = over.id as string;
-
-    if (activeId === overId) return;
-
-    const isActiveAColumn = active.data.current?.type === 'Column';
-    if (isActiveAColumn) return;
+    // Left empty for Kanban board basic DnD as before
   }, []);
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
@@ -106,19 +182,17 @@ export function KanbanBoard() {
     const overColumnId = isOverAColumn ? overId : over.data.current?.columnId;
 
     if (overColumnId) {
-      moveCard(activeId, isOverAColumn ? null : overId, overColumnId as ColumnId);
+      updateMutation.mutate({ id: activeId, columnId: overColumnId as ColumnId });
     }
-  }, [moveCard]);
+  }, [updateMutation]);
 
-  const onDeleteCard = useCallback((cardId: string, columnId: ColumnId) => {
-    deleteCard(columnId, cardId);
-  }, [deleteCard]);
+  const onDeleteCard = useCallback((cardId: string, _columnId: ColumnId) => {
+    deleteMutation.mutate(cardId);
+  }, [deleteMutation]);
 
-  const onEditCard = useCallback((columnId: ColumnId, cardId: string, data: Partial<CardItem>) => {
-    editCard(columnId, cardId, data);
-  }, [editCard]);
-
-  const [newTaskTitle, setNewTaskTitle] = useState('');
+  const onEditCard = useCallback((_columnId: ColumnId, cardId: string, data: Partial<CardItem>) => {
+    updateMutation.mutate({ id: cardId, ...data });
+  }, [updateMutation]);
 
   if (isLoading) {
     return (
@@ -156,7 +230,7 @@ export function KanbanBoard() {
         />
         <Button onClick={() => {
           if (!newTaskTitle.trim()) return;
-          addCard('todo', { id: Date.now().toString(), title: newTaskTitle });
+          addMutation.mutate({ id: Date.now().toString(), title: newTaskTitle, columnId: 'todo' });
           setNewTaskTitle('');
         }}>
           Add Task
@@ -177,23 +251,19 @@ export function KanbanBoard() {
               outline: 'none'
             }}
           />
-          <Button variant="outline" onClick={() => setIsLightMode(prev => !prev)}>
+          <Button variant="outline" onClick={() => setIsLightMode(!isLightMode)}>
             {isLightMode ? 'Dark Mode' : 'Light Mode'}
-          </Button>
-          <Button variant="outline" onClick={() => {
-            const newCards = Array.from({ length: 1000 }).map((_, i) => ({
-              id: `seeded-${Date.now()}-${i}`,
-              title: `Seeded Task ${i + 1}`,
-              description: 'This is a synthetic task for performance testing.',
-            }));
-            seedData({ ...columns, 'todo': [...columns['todo'], ...newCards] });
-          }}>
-            Seed 1000 Cards
           </Button>
           <Button variant="outline" onClick={() => undo()}>Undo (Ctrl+Z)</Button>
           <Button variant="outline" onClick={() => redo()}>Redo (Ctrl+Shift+Z)</Button>
         </div>
       </div>
+
+      {(addMutation.isError || updateMutation.isError || deleteMutation.isError || isError) && (
+        <div style={{ backgroundColor: '#fee2e2', color: '#991b1b', padding: '1rem', borderRadius: 'var(--radius-md)' }}>
+          An error occurred. Changes were reverted. {(error as Error)?.message || 'Failed mutation'}
+        </div>
+      )}
 
       <DndContext 
         sensors={sensors}
