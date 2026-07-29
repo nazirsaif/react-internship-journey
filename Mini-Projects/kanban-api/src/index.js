@@ -16,6 +16,9 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.get('/', (req, res) => {
+  res.json({ message: 'Kanban API is running!' });
+});
 app.use('/cards', cardsRouter);
 
 // Basic error handling for invalid JSON
