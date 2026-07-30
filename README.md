@@ -13,3 +13,4 @@ Projects:
 4. API Based Applications
 5. Final Capstone Project
 6. Kanban Board: [Live Demo](https://nazirsaif.github.io/react-internship-journey/)
+7. Advanced Forms Wizard: [Live Demo](https://nazirsaif.github.io/react-internship-journey/advanced-forms/)
