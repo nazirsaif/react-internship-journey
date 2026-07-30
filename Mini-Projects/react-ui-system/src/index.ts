@@ -1,5 +1,10 @@
 export { Button } from './components/ui/Button';
 export { Card } from './components/ui/Card';
 export { Modal } from './components/ui/Modal';
+export { Badge } from './components/ui/Badge';
+export { Input } from './components/ui/Input';
+export { Textarea } from './components/ui/Textarea';
+export { Select } from './components/ui/Select';
+export { FormField } from './components/ui/FormField';
 export { useLocalStorage } from './hooks/useLocalStorage';
 export { useDebounce } from './hooks/useDebounce';

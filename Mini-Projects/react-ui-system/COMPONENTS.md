@@ -126,3 +126,54 @@ export function Example() {
   );
 }
 ```
+
+---
+
+## Form Components
+
+A suite of accessible form components including `Input`, `Textarea`, `Select`, and a `FormField` wrapper for standardized layout, hinting, and error handling.
+
+### Components
+
+- `<Input>`: Flexible text input with optional error styling.
+- `<Textarea>`: Multi-line text input with error styling.
+- `<Select>`: Standard select dropdown with error styling.
+- `<FormField>`: Accessible wrapper that links hints and errors to the input element via `aria-describedby`.
+
+### Props (FormField)
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `label` | `string` | (Required) | The label text for the input. |
+| `error` | `string` | `undefined` | Error message to display. Sets `aria-invalid` on the input. |
+| `hint` | `string` | `undefined` | Optional helper text displayed below the input. |
+| `children`| `React.ReactElement` | (Required) | The input component to wrap (e.g. `<Input />`). |
+
+### Usage
+
+```tsx
+import { FormField, Input, Select, Textarea } from '@components/ui';
+
+// Basic Input
+<FormField label="Email Address" hint="We'll never share your email.">
+  <Input type="email" placeholder="name@example.com" />
+</FormField>
+
+// Input with Error
+<FormField label="Password" error="Password must be at least 8 characters.">
+  <Input type="password" />
+</FormField>
+
+// Textarea
+<FormField label="Bio">
+  <Textarea placeholder="Tell us about yourself..." />
+</FormField>
+
+// Select
+<FormField label="Role">
+  <Select>
+    <option value="admin">Admin</option>
+    <option value="user">User</option>
+  </Select>
+</FormField>
+```
