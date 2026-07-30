@@ -11,7 +11,7 @@ export interface FormFieldProps {
 
 export function FormField({ label, error, hint, className, children }: FormFieldProps) {
   const defaultId = useId();
-  const inputId = children.props.id || defaultId;
+  const inputId = (children.props as any).id || defaultId;
   const hintId = `${inputId}-hint`;
   const errorId = `${inputId}-error`;
 
@@ -33,7 +33,7 @@ export function FormField({ label, error, hint, className, children }: FormField
         'aria-describedby': describedBy,
         'aria-invalid': !!error,
         error: !!error, // pass error prop to trigger styling if supported
-      })}
+      } as any)}
 
       {hint && (
         <p id={hintId} className="form-hint">

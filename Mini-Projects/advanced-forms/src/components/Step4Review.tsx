@@ -1,4 +1,3 @@
-import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Button } from '@internal/ui-system';
 import type { FullFormData } from '../schemas/formSchemas';

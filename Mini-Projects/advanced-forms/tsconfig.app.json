@@ -13,8 +13,14 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
+    "ignoreDeprecations": "6.0",
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@lib/*": ["../react-ui-system/src/lib/*"],
+      "@hooks/*": ["../react-ui-system/src/hooks/*"]
+    },
 
     /* Linting */
     "noUnusedLocals": true,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocalStorage, Card } from '@internal/ui-system';
@@ -32,7 +32,7 @@ export function Wizard() {
   useEffect(() => {
     const subscription = watch((value) => {
       setStoredData({
-        ...value,
+        ...(value as Partial<FullFormData>),
         _step: currentStep,
       });
     });
@@ -64,7 +64,7 @@ export function Wizard() {
     setStoredData({ _step: 1 });
   };
 
-  const onError = (errors: any) => {
+  const onError = (_errors: any) => {
     // If it gets here, the whole form failed validation on final submit
     // Focus first invalid field logic is already handled inside steps, 
     // but we add an accessible error summary region.
