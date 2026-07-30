@@ -3,6 +3,7 @@
   "private": true,
   "workspaces": [
     "Mini-Projects/react-ui-system",
-    "Mini-Projects/kanban-board"
+    "Mini-Projects/kanban-board",
+    "Mini-Projects/advanced-forms"
   ]
 }
