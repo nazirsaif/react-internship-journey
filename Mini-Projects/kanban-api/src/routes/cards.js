@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const store = require('../data/store');
+const authMiddleware = require('../middleware/auth');
+
+router.use(authMiddleware);
 
 // GET /cards - list all cards
 router.get('/', (req, res) => {
