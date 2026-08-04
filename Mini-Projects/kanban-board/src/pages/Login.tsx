@@ -1,3 +1,44 @@
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Input, FormField, Button, Card } from '@internal/ui-system';
+import { Link, useNavigate } from 'react-router-dom';
+
+const loginSchema = z.object({
+  email: z.string().email({ message: "Invalid email address" }),
+  password: z.string().min(1, { message: "Password is required" }),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
+
 export default function Login() {
-  return <div>Login Page Placeholder</div>;
+  const navigate = useNavigate();
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = async (data: LoginFormValues) => {
+    // API call will be handled in step 4-5
+    console.log("Login data:", data);
+  };
+
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4rem' }}>
+      <Card style={{ width: '400px', padding: '2rem' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '1.5rem' }}>Login</h2>
+        <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <FormField label="Email" error={errors.email?.message}>
+            <Input type="email" placeholder="Email" {...register('email')} />
+          </FormField>
+          <FormField label="Password" error={errors.password?.message}>
+            <Input type="password" placeholder="Password" {...register('password')} />
+          </FormField>
+          <Button type="submit" style={{ marginTop: '1rem' }}>Login</Button>
+        </form>
+        <p style={{ textAlign: 'center', marginTop: '1rem' }}>
+          Don't have an account? <Link to="/signup">Sign up</Link>
+        </p>
+      </Card>
+    </div>
+  );
 }
