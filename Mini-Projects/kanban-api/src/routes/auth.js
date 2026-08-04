@@ -27,7 +27,14 @@ router.post('/signup', async (req, res) => {
     user.refreshTokens.push(refreshToken);
     await user.save();
 
-    res.status(201).json({ accessToken, refreshToken });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    res.status(201).json({ accessToken });
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
   }
@@ -57,7 +64,14 @@ router.post('/login', async (req, res) => {
     user.refreshTokens.push(refreshToken);
     await user.save();
 
-    res.json({ accessToken, refreshToken });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    res.json({ accessToken });
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
   }
@@ -65,7 +79,7 @@ router.post('/login', async (req, res) => {
 
 // POST /auth/refresh
 router.post('/refresh', async (req, res) => {
-  const { refreshToken } = req.body;
+  const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) {
     return res.status(401).json({ error: 'Refresh token is required' });
   }
@@ -88,7 +102,14 @@ router.post('/refresh', async (req, res) => {
     user.refreshTokens.push(newRefreshToken);
     await user.save();
 
-    res.json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
+    res.cookie('refreshToken', newRefreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    res.json({ accessToken: newAccessToken });
   } catch (err) {
     res.status(403).json({ error: 'Invalid refresh token' });
   }
@@ -96,7 +117,7 @@ router.post('/refresh', async (req, res) => {
 
 // POST /auth/logout
 router.post('/logout', async (req, res) => {
-  const { refreshToken } = req.body;
+  const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) {
     return res.status(400).json({ error: 'Refresh token is required' });
   }
@@ -109,6 +130,7 @@ router.post('/logout', async (req, res) => {
       user.refreshTokens = user.refreshTokens.filter(t => t !== refreshToken);
       await user.save();
     }
+    res.clearCookie('refreshToken');
     res.json({ message: 'Logged out successfully' });
   } catch (err) {
     res.status(400).json({ error: 'Invalid token' });
