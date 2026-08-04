@@ -18,6 +18,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     const response = await fetch('http://localhost:3001/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ email, password }),
     });
     if (!response.ok) throw new Error('Login failed');
@@ -28,6 +29,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     const response = await fetch('http://localhost:3001/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify(data),
     });
     if (!response.ok) throw new Error('Signup failed');
@@ -36,7 +38,10 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
   logout: async () => {
     try {
-      await fetch('http://localhost:3001/auth/logout', { method: 'POST' });
+      await fetch('http://localhost:3001/auth/logout', { 
+        method: 'POST',
+        credentials: 'include',
+      });
     } catch (e) {
       console.error(e);
     }

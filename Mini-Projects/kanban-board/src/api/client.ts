@@ -2,8 +2,20 @@ import { useAuthStore } from '../store/useAuthStore';
 
 const BASE_URL = 'http://localhost:3001';
 
-export async function apiClient(endpoint: string, options: RequestInit = {}) {
-  const { accessToken } = useAuthStore.getState();
+let isRefreshing = false;
+let refreshSubscribers: ((token: string) => void)[] = [];
+
+function onRefreshed(token: string) {
+  refreshSubscribers.forEach((cb) => cb(token));
+  refreshSubscribers = [];
+}
+
+function addRefreshSubscriber(cb: (token: string) => void) {
+  refreshSubscribers.push(cb);
+}
+
+export async function apiClient(endpoint: string, options: RequestInit = {}): Promise<any> {
+  const { accessToken, setAccessToken, logout } = useAuthStore.getState();
   
   const headers = new Headers(options.headers || {});
   
@@ -18,11 +30,54 @@ export async function apiClient(endpoint: string, options: RequestInit = {}) {
   const config: RequestInit = {
     ...options,
     headers,
-    credentials: 'include', // Important for sending httpOnly cookies
+    credentials: 'include',
   };
 
-  const response = await fetch(`${BASE_URL}${endpoint}`, config);
+  let response = await fetch(`${BASE_URL}${endpoint}`, config);
   
+  if (response.status === 401 && endpoint !== '/auth/refresh' && endpoint !== '/auth/login') {
+    if (!isRefreshing) {
+      isRefreshing = true;
+      try {
+        const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (!refreshRes.ok) {
+          throw new Error('Refresh failed');
+        }
+
+        const data = await refreshRes.json();
+        setAccessToken(data.accessToken);
+        isRefreshing = false;
+        onRefreshed(data.accessToken);
+      } catch (err) {
+        isRefreshing = false;
+        refreshSubscribers = [];
+        logout();
+        throw err;
+      }
+    }
+
+    const retryPromise = new Promise((resolve) => {
+      addRefreshSubscriber((token: string) => {
+        const newHeaders = new Headers(options.headers || {});
+        newHeaders.set('Authorization', `Bearer ${token}`);
+        if (!newHeaders.has('Content-Type')) newHeaders.set('Content-Type', 'application/json');
+        
+        resolve(fetch(`${BASE_URL}${endpoint}`, {
+          ...options,
+          headers: newHeaders,
+          credentials: 'include',
+        }));
+      });
+    });
+
+    response = (await retryPromise) as Response;
+  }
+
   if (!response.ok) {
     let errorData;
     try {
