@@ -15,6 +15,7 @@ import { KanbanColumn } from './KanbanColumn';
 import type { ColumnId, CardItem } from '../types';
 import { useBoardStore } from '../store/useBoardStore';
 import { Button, useDebounce } from '@internal/ui-system';
+import { apiClient } from '../api/client';
 
 const API_URL = 'http://localhost:3001/cards';
 
@@ -34,24 +35,15 @@ export function KanbanBoard() {
   // Fetch Cards
   const { data: cards = [], isLoading, isError, error } = useQuery<CardItem[]>({
     queryKey: ['cards'],
-    queryFn: async () => {
-      const res = await fetch(API_URL);
-      if (!res.ok) throw new Error('Failed to fetch cards');
-      return res.json();
-    }
+    queryFn: () => apiClient('/cards')
   });
 
   // Mutations
   const addMutation = useMutation({
-    mutationFn: async (newCard: CardItem) => {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newCard)
-      });
-      if (!res.ok) throw new Error('Failed to add card');
-      return res.json();
-    },
+    mutationFn: (newCard: CardItem) => apiClient('/cards', {
+      method: 'POST',
+      body: JSON.stringify(newCard)
+    }),
     onMutate: async (newCard) => {
       await queryClient.cancelQueries({ queryKey: ['cards'] });
       const previousCards = queryClient.getQueryData<CardItem[]>(['cards']);
@@ -67,15 +59,10 @@ export function KanbanBoard() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: async ({ id, ...updates }: Partial<CardItem> & { id: string }) => {
-      const res = await fetch(`${API_URL}/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates)
-      });
-      if (!res.ok) throw new Error('Failed to update card');
-      return res.json();
-    },
+    mutationFn: ({ id, ...updates }: Partial<CardItem> & { id: string }) => apiClient(`/cards/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(updates)
+    }),
     onMutate: async (variables) => {
       await queryClient.cancelQueries({ queryKey: ['cards'] });
       const previousCards = queryClient.getQueryData<CardItem[]>(['cards']);
@@ -93,11 +80,9 @@ export function KanbanBoard() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Failed to delete card');
-      return res.json();
-    },
+    mutationFn: (id: string) => apiClient(`/cards/${id}`, { 
+      method: 'DELETE' 
+    }),
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: ['cards'] });
       const previousCards = queryClient.getQueryData<CardItem[]>(['cards']);
