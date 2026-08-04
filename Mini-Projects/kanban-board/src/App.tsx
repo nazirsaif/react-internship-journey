@@ -1,8 +1,10 @@
 import { Profiler, type ProfilerOnRenderCallback, Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { KanbanBoard } from './components/KanbanBoard';
 
 const Playground = lazy(() => import('./pages/Playground'));
+const Login = lazy(() => import('./pages/Login'));
+const Signup = lazy(() => import('./pages/Signup'));
 
 const onRenderCallback: ProfilerOnRenderCallback = (
   id, 
@@ -24,10 +26,21 @@ function App() {
           <Link to="/playground">Playground</Link>
         </nav>
         <Routes>
-          <Route path="/" element={
+          <Route path="/" element={<Navigate to="/board" replace />} />
+          <Route path="/board" element={
             <Profiler id="KanbanApp" onRender={onRenderCallback}>
               <KanbanBoard />
             </Profiler>
+          } />
+          <Route path="/login" element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <Login />
+            </Suspense>
+          } />
+          <Route path="/signup" element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <Signup />
+            </Suspense>
           } />
           <Route path="/playground" element={
             <Suspense fallback={<div>Loading Playground...</div>}>
