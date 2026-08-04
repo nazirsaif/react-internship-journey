@@ -3,6 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Input, FormField, Button, Card } from '@internal/ui-system';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../store/useAuthStore';
+import { useState } from 'react';
 
 const signupSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -17,13 +19,21 @@ type SignupFormValues = z.infer<typeof signupSchema>;
 
 export default function Signup() {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors } } = useForm<SignupFormValues>({
+  const signup = useAuthStore(state => state.signup);
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
   });
 
   const onSubmit = async (data: SignupFormValues) => {
-    // API call will be handled in step 4-5
-    console.log("Signup data:", data);
+    try {
+      setServerError(null);
+      await signup({ email: data.email, password: data.password });
+      navigate('/board');
+    } catch (err: any) {
+      setServerError(err.message || 'Signup failed');
+    }
   };
 
   return (
@@ -40,7 +50,10 @@ export default function Signup() {
           <FormField label="Confirm Password" error={errors.confirmPassword?.message}>
             <Input type="password" placeholder="Confirm Password" {...register('confirmPassword')} />
           </FormField>
-          <Button type="submit" style={{ marginTop: '1rem' }}>Sign Up</Button>
+          {serverError && <p style={{ color: 'red', textAlign: 'center' }}>{serverError}</p>}
+          <Button type="submit" disabled={isSubmitting} style={{ marginTop: '1rem' }}>
+            {isSubmitting ? 'Signing up...' : 'Sign Up'}
+          </Button>
         </form>
         <p style={{ textAlign: 'center', marginTop: '1rem' }}>
           Already have an account? <Link to="/login">Login</Link>

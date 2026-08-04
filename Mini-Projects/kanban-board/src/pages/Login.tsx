@@ -3,6 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Input, FormField, Button, Card } from '@internal/ui-system';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../store/useAuthStore';
+import { useState } from 'react';
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -13,13 +15,21 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function Login() {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>({
+  const login = useAuthStore(state => state.login);
+  const [serverError, setServerError] = useState<string | null>(null);
+  
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-    // API call will be handled in step 4-5
-    console.log("Login data:", data);
+    try {
+      setServerError(null);
+      await login(data.email, data.password);
+      navigate('/board');
+    } catch (err: any) {
+      setServerError('Invalid email or password');
+    }
   };
 
   return (
@@ -33,7 +43,10 @@ export default function Login() {
           <FormField label="Password" error={errors.password?.message}>
             <Input type="password" placeholder="Password" {...register('password')} />
           </FormField>
-          <Button type="submit" style={{ marginTop: '1rem' }}>Login</Button>
+          {serverError && <p style={{ color: 'red', textAlign: 'center' }}>{serverError}</p>}
+          <Button type="submit" disabled={isSubmitting} style={{ marginTop: '1rem' }}>
+            {isSubmitting ? 'Logging in...' : 'Login'}
+          </Button>
         </form>
         <p style={{ textAlign: 'center', marginTop: '1rem' }}>
           Don't have an account? <Link to="/signup">Sign up</Link>
