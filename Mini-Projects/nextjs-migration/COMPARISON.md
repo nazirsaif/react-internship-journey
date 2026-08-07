@@ -20,3 +20,18 @@ In Next.js, components are Server Components by default.
 - **SEO Meta Tags:** In Next.js, SEO can be handled natively by exporting a `metadata` object in `layout.tsx` or `page.tsx` (e.g., setting the title and description), whereas plain React requires manipulating the `document.title` or using third-party libraries like `react-helmet`.
 - **Automatic Code Splitting:** Next.js automatically code-splits per route. When navigating to `/about`, only the JavaScript necessary for that route is loaded.
 - **Image Optimization:** Although not explicitly used in this specific static migration, Next.js provides the `<Image>` component (`next/image`) which automatically serves correctly sized WebP/AVIF images, preventing layout shift and saving bandwidth—something that requires manual configuration in Vite.
+
+## 5. Rendering Strategies: SSG vs ISR vs SSR
+With the addition of the Blog section, we can clearly see the differences between Next.js's rendering strategies.
+
+- **Static Site Generation (SSG) - `/blog/[slug]` (Base)**:
+  - **How it works:** By using `generateStaticParams`, we tell Next.js to fetch all blog post data at *build time* and generate static HTML files for every post.
+  - **When to use it:** For content that rarely changes (e.g., marketing pages, documentation, legacy blog posts). It offers the fastest load times and best SEO because the HTML is already built and served from a CDN.
+
+- **Incremental Static Regeneration (ISR) - `/blog/[slug]` (with `revalidate: 10`)**:
+  - **How it works:** We added `export const revalidate = 10;` to our blog post pages. Now, Next.js still generates static HTML, but if a request comes in and the page is older than 10 seconds, it will serve the stale static page instantly, while regenerating a fresh version in the background. Subsequent visitors get the new version.
+  - **When to use it:** For content that updates frequently but still needs to be fast and SEO-friendly (e.g., e-commerce product pages, active blog posts, news articles). It gives you the speed of SSG with the freshness of SSR without requiring a full site redeploy.
+
+- **Server-Side Rendering (SSR) - `/blog/latest-activity`**:
+  - **How it works:** By using `export const dynamic = 'force-dynamic'`, this page is dynamically rendered on the server for *every single incoming request*. We demonstrated this by showing a live timestamp that updates on every refresh.
+  - **When to use it:** For highly personalized, user-specific, or real-time data where you cannot afford any stale data (e.g., a user dashboard, a live stock ticker, checkout pages). It is slower than SSG/ISR because the server must compute the HTML on the fly before sending it to the browser.
