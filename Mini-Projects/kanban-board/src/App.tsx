@@ -25,7 +25,8 @@ function App() {
   useEffect(() => {
     async function restoreSession() {
       try {
-        const response = await fetch('http://localhost:3001/auth/refresh', {
+        const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+        const response = await fetch(`${BASE_URL}/auth/refresh`, {
           method: 'POST',
           credentials: 'include'
         });
@@ -58,7 +59,15 @@ function App() {
         <h1 style={{ textAlign: 'center', marginBottom: '1rem' }}>Kanban Board</h1>
         <nav style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <Link to="/board" style={{ marginRight: '1rem' }}>Board</Link>
-          <Link to="/playground">Playground</Link>
+          <Link to="/playground" style={{ marginRight: '1rem' }}>Playground</Link>
+          {accessToken && (
+            <button 
+              onClick={() => useAuthStore.getState().logout()}
+              style={{ padding: '0.5rem 1rem', background: '#dc2626', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+            >
+              Logout
+            </button>
+          )}
         </nav>
         <Routes>
           <Route path="/" element={<Navigate to="/board" replace />} />

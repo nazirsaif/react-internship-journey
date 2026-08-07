@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
-  base: '/react-internship-journey/',
   plugins: [
     react(),
     visualizer({ open: false, filename: 'bundle-stats.html' })
