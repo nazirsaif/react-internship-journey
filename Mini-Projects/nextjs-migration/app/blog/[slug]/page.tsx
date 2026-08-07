@@ -18,6 +18,9 @@ export async function generateStaticParams() {
   }));
 }
 
+// 2. revalidate: Enable ISR
+export const revalidate = 10;
+
 // Page component
 export default async function BlogPost({ params }: { params: { slug: string } }) {
   const posts = await getPosts();
