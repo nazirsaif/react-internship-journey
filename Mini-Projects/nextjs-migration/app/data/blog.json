@@ -1,0 +1,16 @@
+[
+  {
+    "slug": "understanding-nextjs-rendering",
+    "title": "Understanding Next.js Rendering Strategies",
+    "date": "2026-08-07",
+    "excerpt": "A deep dive into CSR, SSR, SSG, and ISR in Next.js App Router.",
+    "content": "Next.js provides multiple ways to render your application. Server-Side Rendering (SSR) fetches data on every request, ensuring the user always sees the most up-to-date content. Static Site Generation (SSG) generates pages at build time, offering incredible performance and SEO. Incremental Static Regeneration (ISR) is a hybrid approach that allows you to update static pages in the background without needing a full rebuild. Finally, Client-Side Rendering (CSR) shifts the rendering to the browser, which is great for highly interactive components."
+  },
+  {
+    "slug": "why-isr-is-game-changer",
+    "title": "Why ISR is a Game Changer",
+    "date": "2026-08-06",
+    "excerpt": "How ISR brings the best of both worlds: speed of static and freshness of server rendering.",
+    "content": "Incremental Static Regeneration (ISR) allows you to use static generation on a per-page basis, without needing to rebuild the entire site. With ISR, you can retain the benefits of static while scaling to millions of pages. When a user requests an ISR page that is past its revalidation window, Next.js serves the stale page immediately, but triggers a background regeneration. Once the regeneration is complete, Next.js invalidates the cache and shows the updated page for subsequent requests. This ensures that users never experience slow loading times while still getting relatively fresh data."
+  }
+]
