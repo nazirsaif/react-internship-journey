@@ -35,3 +35,19 @@ With the addition of the Blog section, we can clearly see the differences betwee
 - **Server-Side Rendering (SSR) - `/blog/latest-activity`**:
   - **How it works:** By using `export const dynamic = 'force-dynamic'`, this page is dynamically rendered on the server for *every single incoming request*. We demonstrated this by showing a live timestamp that updates on every refresh.
   - **When to use it:** For highly personalized, user-specific, or real-time data where you cannot afford any stale data (e.g., a user dashboard, a live stock ticker, checkout pages). It is slower than SSG/ISR because the server must compute the HTML on the fly before sending it to the browser.
+
+## 6. Next.js Route Handlers vs. Separate Express API
+
+With the addition of the Comments feature, we connected Next.js directly to MongoDB using Route Handlers. This highlights the architectural choice between a monolithic Next.js approach vs a decoupled frontend/backend (like the `kanban-api` Express app).
+
+- **When to use Route Handlers (Next.js Monolith):**
+  - **Code Organization:** Keeps frontend and backend logic in a single repository. Types and models can be easily shared between the server routes and client components without duplicating code.
+  - **Deployment:** Simpler deployment process. Platforms like Vercel automatically deploy Next.js Route Handlers as Serverless Functions. There's no need to manage separate hosting for a Node.js/Express server.
+  - **Scaling:** Route handlers scale automatically as serverless functions. However, serverless functions can lead to cold starts, and managing stateful connections (like MongoDB) requires connection caching to avoid exhausting connection pools.
+  - **Use Case:** Best for small-to-medium apps, side projects, or features heavily coupled to the UI (like our blog comments).
+
+- **When to use a separate Express API (Decoupled):**
+  - **Code Organization:** Enforces a strict separation of concerns. The API can be maintained by a dedicated backend team and can serve multiple frontends (e.g., a web app, an iOS app, and an Android app) uniformly.
+  - **Deployment:** Requires separate infrastructure (e.g., Docker containers). The deployment pipeline is more complex, but provides full control over the runtime environment.
+  - **Scaling:** Better suited for heavy background processing, websockets, or maintaining long-lived database connections without the limitations of serverless execution limits.
+  - **Use Case:** Best for large-scale enterprise applications, microservices architectures, or APIs that act as a central hub for various clients (like the `kanban-api`).
