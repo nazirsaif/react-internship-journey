@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Comments from '@/app/components/Comments';
 
 // Read data once for both generating params and rendering
 async function getPosts() {
@@ -44,6 +45,8 @@ export default async function BlogPost({ params }: { params: { slug: string } })
           {post.content}
         </div>
       </article>
+
+      <Comments blogSlug={post.slug} />
       
       <div className="mt-12 p-4 bg-gray-50 border-l-4 border-gray-300 text-sm text-gray-700">
         <p><strong>Note for verification:</strong> This page was rendered at {new Date().toISOString()}</p>
