@@ -4,11 +4,12 @@ import Post from '@/models/Post';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-    const post = await Post.findById(params.id);
+    const resolvedParams = await params;
+    const post = await Post.findById(resolvedParams.id);
     
     if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
@@ -23,14 +24,15 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
     const body = await request.json();
+    const resolvedParams = await params;
     
     const updatedPost = await Post.findByIdAndUpdate(
-      params.id,
+      resolvedParams.id,
       { $set: body },
       { new: true, runValidators: true }
     );
@@ -48,11 +50,12 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-    const deletedPost = await Post.findByIdAndDelete(params.id);
+    const resolvedParams = await params;
+    const deletedPost = await Post.findByIdAndDelete(resolvedParams.id);
     
     if (!deletedPost) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });

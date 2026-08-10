@@ -23,9 +23,10 @@ export async function generateStaticParams() {
 export const revalidate = 10;
 
 // Page component
-export default async function BlogPost({ params }: { params: { slug: string } }) {
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
   const posts = await getPosts();
-  const post = posts.find((p: any) => p.slug === params.slug);
+  const post = posts.find((p: any) => p.slug === resolvedParams.slug);
 
   if (!post) {
     notFound();
