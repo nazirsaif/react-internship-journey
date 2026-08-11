@@ -241,6 +241,14 @@ body, html {
   margin-bottom: 0.25rem;
 }
 
+.message-seen {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: right;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
 .input-area {
   padding: 1rem;
   background-color: #ffffff;

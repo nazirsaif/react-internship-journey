@@ -12,6 +12,7 @@ interface Message {
   sender: string;
   text: string;
   timestamp: string;
+  readBy?: string[];
 }
 
 interface OnlineUser {
@@ -31,6 +32,7 @@ function App() {
   const [typingUser, setTypingUser] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
+  const [isWindowFocused, setIsWindowFocused] = useState(document.hasFocus());
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -51,10 +53,27 @@ function App() {
       setIsConnected(false);
     });
 
+    const handleFocus = () => setIsWindowFocused(true);
+    const handleBlur = () => setIsWindowFocused(false);
+    window.addEventListener('focus', handleFocus);
+    window.addEventListener('blur', handleBlur);
+
     return () => {
       newSocket.close();
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('blur', handleBlur);
     };
   }, []);
+
+  useEffect(() => {
+    if (socket && currentRoom && isWindowFocused) {
+      messages.forEach(msg => {
+        if (msg._id && msg.sender !== username && (!msg.readBy || !msg.readBy.includes(username))) {
+          socket.emit('markAsRead', { messageId: msg._id, username, room: currentRoom });
+        }
+      });
+    }
+  }, [messages, isWindowFocused, socket, currentRoom, username]);
 
   useEffect(() => {
     if (!socket) return;
@@ -92,6 +111,10 @@ function App() {
       setOnlineUsers(users);
     });
 
+    socket.on('messageUpdated', (updatedMsg: Message) => {
+      setMessages(prev => prev.map(m => m._id === updatedMsg._id ? updatedMsg : m));
+    });
+
     return () => {
       socket.off('messageHistory');
       socket.off('chatMessage');
@@ -99,6 +122,7 @@ function App() {
       socket.off('typing');
       socket.off('stopTyping');
       socket.off('roomUsers');
+      socket.off('messageUpdated');
     };
   }, [socket, currentRoom]);
 
@@ -217,6 +241,11 @@ function App() {
                     <div className={`message-bubble ${msg.sender === username ? 'own' : 'other'}`}>
                       {msg.sender !== username && <div className="message-sender">{msg.sender}</div>}
                       <div className="message-text">{msg.text}</div>
+                      {msg.sender === username && msg.readBy && msg.readBy.length > 0 && (
+                        <div className="message-seen">
+                          Seen by {msg.readBy.filter(u => u !== username).join(', ')}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
