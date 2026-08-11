@@ -28,22 +28,39 @@ const messageSchema = new mongoose.Schema({
   sender: String,
   text: String,
   timestamp: { type: Date, default: Date.now },
+  readBy: { type: [String], default: [] },
 });
 const Message = mongoose.model('Message', messageSchema);
 
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
-  socket.on('joinRoom', async (room) => {
-    // Leave previous rooms (except the socket's own room)
-    Array.from(socket.rooms).forEach(r => {
-      if (r !== socket.id) socket.leave(r);
+  const broadcastRoomUsers = async (room) => {
+    if (!room) return;
+    const sockets = await io.in(room).fetchSockets();
+    const users = sockets.map(s => ({ id: s.id, username: s.data.username }));
+    io.to(room).emit('roomUsers', users);
+  };
+
+  socket.on('joinRoom', async ({ room, username }) => {
+    const previousRooms = Array.from(socket.rooms).filter(r => r !== socket.id);
+    
+    // Leave previous rooms
+    previousRooms.forEach(r => {
+      socket.leave(r);
     });
 
     socket.join(room);
-    console.log(`Socket ${socket.id} joined room ${room}`);
+    socket.data.username = username;
+    socket.data.room = room;
+    console.log(`Socket ${socket.id} (${username}) joined room ${room}`);
     
-    socket.broadcast.to(room).emit('system', `A new user joined ${room}`);
+    socket.broadcast.to(room).emit('system', `${username} joined ${room}`);
+
+    for (const r of previousRooms) {
+      await broadcastRoomUsers(r);
+    }
+    await broadcastRoomUsers(room);
 
     // Fetch message history for this room
     try {
@@ -77,8 +94,27 @@ io.on('connection', (socket) => {
     socket.broadcast.to(room).emit('stopTyping', socket.id);
   });
 
-  socket.on('disconnect', () => {
+  socket.on('markAsRead', async ({ messageId, username, room }) => {
+    try {
+      const msg = await Message.findById(messageId);
+      if (msg && !msg.readBy.includes(username)) {
+        msg.readBy.push(username);
+        await msg.save();
+        io.to(room).emit('messageUpdated', msg);
+      }
+    } catch (err) {
+      console.error('Error marking as read:', err);
+    }
+  });
+
+  socket.on('disconnect', async () => {
     console.log('User disconnected:', socket.id);
+    if (socket.data.room) {
+      // Small delay to let socket actually leave the room in socket.io before fetching sockets
+      setTimeout(async () => {
+        await broadcastRoomUsers(socket.data.room);
+      }, 0);
+    }
   });
 });
 

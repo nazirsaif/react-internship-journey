@@ -14,7 +14,12 @@ interface Message {
   timestamp: string;
 }
 
-const SERVER_URL = 'http://localhost:3001';
+interface OnlineUser {
+  id: string;
+  username: string;
+}
+
+const SERVER_URL = 'http://localhost:3002';
 
 function App() {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -25,6 +30,7 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [typingUser, setTypingUser] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -82,12 +88,17 @@ function App() {
       setTypingUser(null);
     });
 
+    socket.on('roomUsers', (users: OnlineUser[]) => {
+      setOnlineUsers(users);
+    });
+
     return () => {
       socket.off('messageHistory');
       socket.off('chatMessage');
       socket.off('system');
       socket.off('typing');
       socket.off('stopTyping');
+      socket.off('roomUsers');
     };
   }, [socket, currentRoom]);
 
@@ -100,7 +111,7 @@ function App() {
   const handleJoinRoom = (e: React.FormEvent) => {
     e.preventDefault();
     if (room.trim() && socket) {
-      socket.emit('joinRoom', room);
+      socket.emit('joinRoom', { room, username });
       setCurrentRoom(room);
       setMessages([]);
     }
@@ -175,9 +186,25 @@ function App() {
           <>
             {/* Header */}
             <div className="chat-header">
-              <h2>
-                <span className="hash">#</span> {currentRoom}
-              </h2>
+              <div className="chat-header-info">
+                <h2>
+                  <span className="hash">#</span> {currentRoom}
+                </h2>
+              </div>
+              <div className="online-users-container">
+                <div className="online-users-count">
+                  <Users size={16} />
+                  <span>{onlineUsers.length} online</span>
+                </div>
+                <div className="online-users-list">
+                  {onlineUsers.map(u => (
+                    <div key={u.id} className="online-user-item">
+                      <div className="status-dot connected"></div>
+                      <span className="online-user-name">{u.username === username ? 'You' : u.username}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Messages */}
