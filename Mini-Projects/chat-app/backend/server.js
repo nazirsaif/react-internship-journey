@@ -3,6 +3,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 app.use(cors());
@@ -15,7 +16,7 @@ const io = new Server(server, {
 });
 
 // MongoDB Connection
-mongoose.connect('mongodb://127.0.0.1:27017/chat-app')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/chat-app')
   .then(() => {
     console.log('Connected to MongoDB');
   }).catch((err) => {
