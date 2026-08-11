@@ -58,8 +58,10 @@ function App() {
   const [isConnected, setIsConnected] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
   const [isWindowFocused, setIsWindowFocused] = useState(document.hasFocus());
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesAreaRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -105,12 +107,13 @@ function App() {
 
     socket.on('messageHistory', (history: Message[]) => {
       setMessages(history);
-      scrollToBottom();
+      setIsLoadingHistory(false);
+      scrollToBottom(true);
     });
 
     socket.on('chatMessage', (message: Message) => {
       setMessages((prev) => [...prev, message]);
-      scrollToBottom();
+      scrollToBottom(message.sender === username);
     });
 
     socket.on('system', (msg: string) => {
@@ -151,15 +154,23 @@ function App() {
     };
   }, [socket, currentRoom]);
 
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
+  const scrollToBottom = (force = false) => {
+    if (!messagesAreaRef.current) return;
+    
+    const { scrollTop, scrollHeight, clientHeight } = messagesAreaRef.current;
+    const isScrolledToBottom = scrollHeight - scrollTop - clientHeight < 150;
+
+    if (force || isScrolledToBottom) {
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
   };
 
   const handleJoinRoom = (e: React.FormEvent) => {
     e.preventDefault();
     if (room.trim() && socket) {
+      setIsLoadingHistory(true);
       socket.emit('joinRoom', { room, username });
       setCurrentRoom(room);
       setMessages([]);
@@ -257,27 +268,39 @@ function App() {
             </div>
 
             {/* Messages */}
-            <div className="messages-area">
-              {messages.map((msg, idx) => (
-                <div key={msg._id || idx} className={`message-wrapper ${msg.sender === username ? 'own' : 'other'}`}>
-                  {msg.sender === 'System' ? (
-                    <div className="system-message">{msg.text}</div>
-                  ) : (
-                    <div className={`message-bubble ${msg.sender === username ? 'own' : 'other'}`}>
-                      {msg.sender !== username && <div className="message-sender">{msg.sender}</div>}
-                      <div className="message-text">{msg.text}</div>
-                      <div className="message-meta">
-                        <RelativeTime timestamp={msg.timestamp} />
-                        {msg.sender === username && msg.readBy && msg.readBy.length > 0 && (
-                          <span className="message-seen">
-                             ・ Seen by {msg.readBy.filter(u => u !== username).join(', ')}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  )}
+            <div className="messages-area" ref={messagesAreaRef}>
+              {isLoadingHistory ? (
+                <div className="empty-state">
+                  <div className="loading-spinner"></div>
+                  <p>Loading messages...</p>
                 </div>
-              ))}
+              ) : messages.length === 0 ? (
+                <div className="empty-state">
+                  <MessageSquare size={48} />
+                  <p>No messages yet. Be the first to say hi!</p>
+                </div>
+              ) : (
+                messages.map((msg, idx) => (
+                  <div key={msg._id || idx} className={`message-wrapper ${msg.sender === username ? 'own' : 'other'}`}>
+                    {msg.sender === 'System' ? (
+                      <div className="system-message">{msg.text}</div>
+                    ) : (
+                      <div className={`message-bubble ${msg.sender === username ? 'own' : 'other'}`}>
+                        {msg.sender !== username && <div className="message-sender">{msg.sender}</div>}
+                        <div className="message-text">{msg.text}</div>
+                        <div className="message-meta">
+                          <RelativeTime timestamp={msg.timestamp} />
+                          {msg.sender === username && msg.readBy && msg.readBy.length > 0 && (
+                            <span className="message-seen">
+                               ・ Seen by {msg.readBy.filter(u => u !== username).join(', ')}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))
+              )}
               <div ref={messagesEndRef} />
             </div>
 
