@@ -20,7 +20,7 @@ interface OnlineUser {
   username: string;
 }
 
-const SERVER_URL = 'http://localhost:3002';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3002';
 
 function getRelativeTime(timestamp: string) {
   const diffInSeconds = Math.floor((new Date().getTime() - new Date(timestamp).getTime()) / 1000);
