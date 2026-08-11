@@ -241,11 +241,26 @@ body, html {
   margin-bottom: 0.25rem;
 }
 
+.message-meta {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.message-time {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.message-bubble.other .message-time {
+  color: #9ca3af;
+}
+
 .message-seen {
   font-size: 0.65rem;
   color: rgba(255, 255, 255, 0.8);
-  text-align: right;
-  margin-top: 0.25rem;
   font-style: italic;
 }
 

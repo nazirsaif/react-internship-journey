@@ -22,6 +22,31 @@ interface OnlineUser {
 
 const SERVER_URL = 'http://localhost:3002';
 
+function getRelativeTime(timestamp: string) {
+  const diffInSeconds = Math.floor((new Date().getTime() - new Date(timestamp).getTime()) / 1000);
+  if (diffInSeconds < 60) return 'just now';
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24) return `${diffInHours}h ago`;
+  const diffInDays = Math.floor(diffInHours / 24);
+  return `${diffInDays}d ago`;
+}
+
+function RelativeTime({ timestamp }: { timestamp: string }) {
+  const [timeStr, setTimeStr] = useState(getRelativeTime(timestamp));
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeStr(getRelativeTime(timestamp));
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [timestamp]);
+
+  return <span className="message-time">{timeStr}</span>;
+}
+
 function App() {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [room, setRoom] = useState<string>('');
@@ -241,11 +266,14 @@ function App() {
                     <div className={`message-bubble ${msg.sender === username ? 'own' : 'other'}`}>
                       {msg.sender !== username && <div className="message-sender">{msg.sender}</div>}
                       <div className="message-text">{msg.text}</div>
-                      {msg.sender === username && msg.readBy && msg.readBy.length > 0 && (
-                        <div className="message-seen">
-                          Seen by {msg.readBy.filter(u => u !== username).join(', ')}
-                        </div>
-                      )}
+                      <div className="message-meta">
+                        <RelativeTime timestamp={msg.timestamp} />
+                        {msg.sender === username && msg.readBy && msg.readBy.length > 0 && (
+                          <span className="message-seen">
+                             ・ Seen by {msg.readBy.filter(u => u !== username).join(', ')}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>
