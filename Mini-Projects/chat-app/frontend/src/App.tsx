@@ -72,14 +72,6 @@ function App() {
     const newSocket = io(SERVER_URL);
     setSocket(newSocket);
 
-    newSocket.on('connect', () => {
-      setIsConnected(true);
-    });
-
-    newSocket.on('disconnect', () => {
-      setIsConnected(false);
-    });
-
     const handleFocus = () => setIsWindowFocused(true);
     const handleBlur = () => setIsWindowFocused(false);
     window.addEventListener('focus', handleFocus);
@@ -104,6 +96,22 @@ function App() {
 
   useEffect(() => {
     if (!socket) return;
+
+    setIsConnected(socket.connected);
+
+    const onConnect = () => {
+      setIsConnected(true);
+      if (currentRoom && username) {
+        socket.emit('joinRoom', { room: currentRoom, username });
+      }
+    };
+
+    const onDisconnect = () => {
+      setIsConnected(false);
+    };
+
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
 
     socket.on('messageHistory', (history: Message[]) => {
       setMessages(history);
@@ -144,6 +152,8 @@ function App() {
     });
 
     return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
       socket.off('messageHistory');
       socket.off('chatMessage');
       socket.off('system');
@@ -152,7 +162,7 @@ function App() {
       socket.off('roomUsers');
       socket.off('messageUpdated');
     };
-  }, [socket, currentRoom]);
+  }, [socket, currentRoom, username]);
 
   const scrollToBottom = (force = false) => {
     if (!messagesAreaRef.current) return;
