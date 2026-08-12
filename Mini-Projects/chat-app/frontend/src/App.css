@@ -223,7 +223,7 @@ body, html {
   width: 100%;
   text-align: center;
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: var(--text-muted);
   margin: 0.5rem 0;
 }
 
@@ -251,7 +251,7 @@ body, html {
 .message-sender {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #9ca3af;
+  color: var(--text-muted);
   margin-bottom: 0.25rem;
 }
 
@@ -269,7 +269,7 @@ body, html {
 }
 
 .message-bubble.other .message-time {
-  color: #9ca3af;
+  color: var(--text-muted);
 }
 
 .message-seen {
@@ -286,7 +286,7 @@ body, html {
 
 .typing-indicator {
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: var(--text-muted);
   font-style: italic;
   margin-bottom: 0.5rem;
   height: 1rem;
