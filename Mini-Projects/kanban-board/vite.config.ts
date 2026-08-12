@@ -9,6 +9,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+      '@': '/src',
       '@lib': '/../react-ui-system/src/lib',
       '@hooks': '/../react-ui-system/src/hooks'
     }

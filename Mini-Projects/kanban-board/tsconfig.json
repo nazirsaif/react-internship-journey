@@ -17,6 +17,7 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
+      "@/*": ["./src/*"],
       "@lib/*": ["../react-ui-system/src/lib/*"],
       "@hooks/*": ["../react-ui-system/src/hooks/*"]
     },
