@@ -14,7 +14,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { KanbanColumn } from './KanbanColumn';
 import type { ColumnId, CardItem } from '../types';
 import { useBoardStore } from '../store/useBoardStore';
-import { Button, useDebounce } from '@internal/ui-system';
+import { useDebounce } from '@internal/ui-system';
+import { Button } from '@/components/ui/button';
 import { apiClient } from '../api/client';
 
 const API_URL = 'http://localhost:3001/cards';

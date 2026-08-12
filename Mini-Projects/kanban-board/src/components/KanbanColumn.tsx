@@ -2,7 +2,7 @@ import { memo, useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { Card } from '@internal/ui-system';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { KanbanCard } from './KanbanCard';
 import type { CardItem, ColumnId } from '../types';
 
@@ -34,32 +34,22 @@ export const KanbanColumn = memo(function KanbanColumn({ id, title, cards, onDel
 
   return (
     <Card 
+      className="w-[300px] flex flex-col h-full transition-shadow transition-colors"
       style={{ 
-        width: '300px', 
-        display: 'flex', 
-        flexDirection: 'column', 
-        height: '100%',
         borderColor: isOver ? 'var(--primary-color)' : 'var(--border-color)',
-        transition: 'border-color 0.2s, box-shadow 0.2s',
         boxShadow: isOver ? '0 0 0 1px var(--primary-color)' : 'none'
       }}
     >
-      <Card.Header>
-        <h3 style={{ margin: 0 }}>{title}</h3>
-      </Card.Header>
+      <CardHeader className="py-3 px-4 border-b">
+        <CardTitle className="text-lg m-0">{title}</CardTitle>
+      </CardHeader>
       
-      <Card.Body 
+      <CardContent 
         ref={(node: HTMLDivElement | null) => {
           parentRef.current = node;
           setNodeRef(node);
         }}
-        style={{ 
-          flexGrow: 1, 
-          height: '600px', // constrain height to allow scrolling
-          overflowY: 'auto',
-          padding: '0.5rem',
-          position: 'relative'
-        }}
+        className="flex-grow h-[600px] overflow-y-auto p-2 relative"
       >
         <SortableContext items={cards.map(c => c.id)} strategy={verticalListSortingStrategy}>
           <div style={{
@@ -94,7 +84,7 @@ export const KanbanColumn = memo(function KanbanColumn({ id, title, cards, onDel
             </div>
           )}
         </SortableContext>
-      </Card.Body>
+      </CardContent>
     </Card>
   );
 });

@@ -1,7 +1,8 @@
 import React, { useState, memo, useMemo } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Card, Button } from '@internal/ui-system';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import type { CardItem, ColumnId } from '../types';
 import { PREDEFINED_LABELS } from '../types';
 import { EditCardModal } from './EditCardModal';
@@ -47,7 +48,8 @@ export const KanbanCard = memo(function KanbanCard({ card, columnId, onDeleteCar
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Card hoverable padding="sm" style={{ marginBottom: 0, cursor: 'grab', backgroundColor: 'var(--bg-color)' }}>
+      <Card className="hover:shadow-md transition-shadow cursor-grab mb-0 relative z-10" style={{ backgroundColor: 'var(--bg-color)' }}>
+        <CardContent className="p-3">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span>{card.title}</span>
           <div style={{ display: 'flex', gap: '0.25rem' }}>
@@ -105,6 +107,7 @@ export const KanbanCard = memo(function KanbanCard({ card, columnId, onDeleteCar
             Due: {card.dueDate} {isOverdue && '(Overdue)'}
           </div>
         )}
+        </CardContent>
       </Card>
 
       {isEditOpen && (

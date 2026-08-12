@@ -1,7 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Input, FormField, Button, Card } from '@internal/ui-system';
+import { Input, FormField } from '@internal/ui-system';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { useState } from 'react';
@@ -34,8 +36,11 @@ export default function Login() {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4rem' }}>
-      <Card style={{ width: '400px', padding: '2rem' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '1.5rem' }}>Login</h2>
+      <Card className="w-[400px]">
+        <CardHeader>
+          <CardTitle className="text-center">Login</CardTitle>
+        </CardHeader>
+        <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <FormField label="Email" error={errors.email?.message}>
             <Input type="email" placeholder="Email" {...register('email')} />
@@ -51,6 +56,7 @@ export default function Login() {
         <p style={{ textAlign: 'center', marginTop: '1rem' }}>
           Don't have an account? <Link to="/signup">Sign up</Link>
         </p>
+        </CardContent>
       </Card>
     </div>
   );

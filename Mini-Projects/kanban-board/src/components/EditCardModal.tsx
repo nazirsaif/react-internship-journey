@@ -1,7 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Modal, Button } from '@internal/ui-system';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import type { CardItem } from '../types';
 import { PREDEFINED_LABELS } from '../types';
 
@@ -38,7 +39,11 @@ export function EditCardModal({ isOpen, onClose, card, onSave }: EditCardModalPr
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Edit Task">
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Edit Task</DialogTitle>
+        </DialogHeader>
       <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <label htmlFor="title" style={{ fontSize: '0.875rem', fontWeight: 500 }}>Title</label>
@@ -118,10 +123,11 @@ export function EditCardModal({ isOpen, onClose, card, onSave }: EditCardModalPr
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
-          <Button type="button" onClick={onClose} className="btn-outline">Cancel</Button>
-          <Button type="submit" className="btn-primary">Save Changes</Button>
+          <Button type="button" onClick={onClose} variant="outline">Cancel</Button>
+          <Button type="submit">Save Changes</Button>
         </div>
       </form>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   );
 }
