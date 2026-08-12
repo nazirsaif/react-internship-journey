@@ -912,7 +912,7 @@ body.light-mode .hamburger .bar {
 }
 
 .input:focus, .textarea:focus, .select:focus {
-  outline: none;
+  outline: 2px solid transparent;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
   background-color: rgba(30, 41, 59, 0.8);
