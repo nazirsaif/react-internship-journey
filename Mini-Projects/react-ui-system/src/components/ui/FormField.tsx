@@ -42,7 +42,7 @@ export function FormField({ label, error, hint, className, children }: FormField
       )}
 
       {error && (
-        <p id={errorId} className="form-error" role="alert">
+        <p id={errorId} className="form-error" aria-live="polite">
           {error}
         </p>
       )}

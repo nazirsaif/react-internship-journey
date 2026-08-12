@@ -236,8 +236,9 @@ function App() {
 
         <form onSubmit={handleJoinRoom} className="join-form">
           <div>
-            <label>Join a Room</label>
+            <label htmlFor="room-input">Join a Room</label>
             <Input 
+              id="room-input"
               value={room} 
               onChange={(e) => setRoom(e.target.value)}
               placeholder="e.g. general"
@@ -321,6 +322,7 @@ function App() {
               </div>
               <form onSubmit={handleSendMessage} className="message-form">
                 <Input 
+                  aria-label="Message text"
                   value={inputValue}
                   onChange={handleTyping}
                   placeholder={`Message #${currentRoom}`}
