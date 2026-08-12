@@ -13,5 +13,15 @@ export default defineConfig({
       'class-variance-authority': path.resolve(__dirname, './node_modules/class-variance-authority'),
       'clsx': path.resolve(__dirname, './node_modules/clsx')
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          socket: ['socket.io-client']
+        }
+      }
+    }
   }
 })

@@ -13,5 +13,15 @@ export default defineConfig({
       '@lib': '/../react-ui-system/src/lib',
       '@hooks': '/../react-ui-system/src/hooks'
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          'dnd-kit': ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities']
+        }
+      }
+    }
   }
 });
