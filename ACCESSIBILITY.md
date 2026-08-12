@@ -23,4 +23,24 @@ This document outlines the initial findings from running `@axe-core/react` acros
 ---
 
 ## Remediation Results
-*(To be updated after fixes are applied)*
+
+Following the implementation of the fixes, a re-audit was performed across all three projects using `@axe-core/react` and static verification.
+
+**Final Status:** 0 Critical/Serious violations.
+
+### Fixes Applied:
+1. **Color Contrast:**
+   - `react-ui-system`: Updated `--text-muted` to `#cbd5e1` to pass AA contrast on dark background.
+   - `kanban-board`: Updated light mode `--text` to `#4a4a4a` to pass AA contrast on white background.
+   - `chat-app`: Updated `.message-time` and `.system-message` to `var(--text-muted)` (#6b7280) for compliant contrast against white/light-gray backgrounds.
+2. **Keyboard Navigation & Focus:**
+   - Removed the restrictive `outline: none` on inputs in `react-ui-system` and replaced it with `outline: 2px solid transparent` alongside the custom box-shadow.
+   - Implemented a global `:focus-visible` ring across all three projects using their respective primary/accent variables to ensure keyboard users always see a clear focus indicator.
+   - Removed inline `outline: none` overrides from `KanbanBoard.tsx`.
+3. **Form Labels & Errors:**
+   - Updated `FormField.tsx` to announce validation errors dynamically using `aria-live="polite"`.
+   - Added explicit `htmlFor` attributes to the "Join Room" label in `chat-app` and an `aria-label` to the main chat message input.
+4. **Dynamic Content:**
+   - Updated `DndContext` in `kanban-board` with explicit screen-reader `announcements` covering `onDragStart`, `onDragOver`, `onDragEnd`, and `onDragCancel`.
+   - Tagged the `.messages-area` in `chat-app` with `aria-live="polite" aria-atomic="false" aria-relevant="additions"` so new incoming messages are naturally announced to assistive technologies.
+   - Verified that the custom `Modal` in `react-ui-system` utilizes `useFocusTrap` correctly, keeping Tab navigation restricted to the modal content.
