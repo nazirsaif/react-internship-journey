@@ -153,7 +153,7 @@ const LazyImage = ({ src, alt }: { src: string; alt: string }) => {
       }}
     >
       {isVisible ? (
-        <img src={src} alt={alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+        <img src={src} alt={alt} width="800" height="600" loading="lazy" style={{ width: '100%', height: 'auto', display: 'block' }} />
       ) : (
         <span style={{ color: 'var(--text-muted)' }}>Loading...</span>
       )}

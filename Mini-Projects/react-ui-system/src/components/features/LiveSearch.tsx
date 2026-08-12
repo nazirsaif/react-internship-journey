@@ -86,7 +86,7 @@ export const LiveSearch: React.FC = () => {
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {data.slice(0, 5).map(country => (
               <li key={country.name.common} style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.5rem 0', borderBottom: '1px solid var(--border-color)' }}>
-                <img src={country.flags.svg} alt={`Flag of ${country.name.common}`} style={{ width: '32px', height: 'auto', borderRadius: '2px' }} />
+                <img src={country.flags.svg} alt={`Flag of ${country.name.common}`} width="32" height="24" loading="lazy" style={{ width: '32px', height: 'auto', borderRadius: '2px' }} />
                 <div>
                   <div style={{ fontWeight: 500 }}>{country.name.common}</div>
                   <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>{country.region}</div>
