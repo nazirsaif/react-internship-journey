@@ -279,7 +279,7 @@ function App() {
             </div>
 
             {/* Messages */}
-            <div className="messages-area" ref={messagesAreaRef}>
+            <div className="messages-area" ref={messagesAreaRef} aria-live="polite" aria-atomic="false" aria-relevant="additions">
               {isLoadingHistory ? (
                 <div className="empty-state">
                   <div className="loading-spinner"></div>

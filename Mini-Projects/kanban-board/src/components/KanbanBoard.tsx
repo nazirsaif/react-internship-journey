@@ -153,6 +153,27 @@ export function KanbanBoard() {
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
+  const announcements = {
+    onDragStart({ active }: { active: any }) {
+      return `Picked up sortable item ${active.id}.`;
+    },
+    onDragOver({ active, over }: { active: any, over: any }) {
+      if (over) {
+        return `Sortable item ${active.id} was moved into column ${over.id}.`;
+      }
+      return `Sortable item ${active.id} is no longer over a column.`;
+    },
+    onDragEnd({ active, over }: { active: any, over: any }) {
+      if (over) {
+        return `Sortable item ${active.id} was dropped into column ${over.id}.`;
+      }
+      return `Sortable item ${active.id} was dropped.`;
+    },
+    onDragCancel({ active }: { active: any }) {
+      return `Dragging was cancelled. Sortable item ${active.id} was dropped.`;
+    },
+  };
+
   const handleDragOver = useCallback((event: DragOverEvent) => {
     // Left empty for Kanban board basic DnD as before
   }, []);
@@ -212,8 +233,7 @@ export function KanbanBoard() {
             borderRadius: 'var(--radius-md)', 
             border: '1px solid var(--border-color)',
             backgroundColor: 'var(--bg-color)',
-            color: 'var(--text-main)',
-            outline: 'none'
+            color: 'var(--text-main)'
           }}
         />
         <Button onClick={() => {
@@ -235,8 +255,7 @@ export function KanbanBoard() {
               borderRadius: 'var(--radius-md)', 
               border: '1px solid var(--border-color)',
               backgroundColor: 'var(--bg-color)',
-              color: 'var(--text-main)',
-              outline: 'none'
+              color: 'var(--text-main)'
             }}
           />
           <Button variant="outline" onClick={() => setIsLightMode(!isLightMode)}>
@@ -258,6 +277,7 @@ export function KanbanBoard() {
         collisionDetection={closestCorners}
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
+        announcements={announcements}
       >
         <div style={{ display: 'flex', gap: '1.5rem', height: '100%', minHeight: '600px' }}>
           <KanbanColumn id="todo" title="To Do" cards={filteredColumns['todo']} onDeleteCard={onDeleteCard} onEditCard={onEditCard} />
