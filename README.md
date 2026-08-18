@@ -1,5 +1,10 @@
 # React Internship Journey
 
+[![React UI System CI](https://github.com/nazirsaif/react-internship-journey/actions/workflows/ci.yml/badge.svg?job=react-ui-system)](https://github.com/nazirsaif/react-internship-journey/actions/workflows/ci.yml)
+[![Kanban Board CI](https://github.com/nazirsaif/react-internship-journey/actions/workflows/ci.yml/badge.svg?job=kanban-board)](https://github.com/nazirsaif/react-internship-journey/actions/workflows/ci.yml)
+[![Kanban API CI](https://github.com/nazirsaif/react-internship-journey/actions/workflows/ci.yml/badge.svg?job=kanban-api)](https://github.com/nazirsaif/react-internship-journey/actions/workflows/ci.yml)
+[![Chat App CI](https://github.com/nazirsaif/react-internship-journey/actions/workflows/ci.yml/badge.svg?job=chat-app)](https://github.com/nazirsaif/react-internship-journey/actions/workflows/ci.yml)
+
 Duration:
 6 Weeks
 
