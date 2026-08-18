@@ -22,6 +22,11 @@ jobs:
         cache: 'npm'
     - name: Install dependencies
       run: npm ci
+    - name: Lint
+      run: npm run lint --workspace=Mini-Projects/react-ui-system
+    - name: Type check
+      run: npx tsc --noEmit
+      working-directory: Mini-Projects/react-ui-system
 
   kanban-board:
     name: Kanban Board
@@ -38,6 +43,15 @@ jobs:
         cache: 'npm'
     - name: Install dependencies
       run: npm ci
+    - name: Type check
+      run: npx tsc --noEmit
+      working-directory: Mini-Projects/kanban-board
+    - name: Run Unit Tests
+      run: npm run test --workspace=Mini-Projects/kanban-board -- --coverage
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    - name: Run E2E tests
+      run: npm run test:e2e --workspace=Mini-Projects/kanban-board
 
   kanban-api:
     name: Kanban API
@@ -53,6 +67,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Install dependencies
       run: npm install
+      working-directory: Mini-Projects/kanban-api
+    - name: Run Tests
+      run: npm test
       working-directory: Mini-Projects/kanban-api
 
   chat-app:
@@ -71,7 +88,16 @@ jobs:
     - name: Install frontend dependencies
       run: npm install
       working-directory: Mini-Projects/chat-app/frontend
+    - name: Lint frontend
+      run: npm run lint
+      working-directory: Mini-Projects/chat-app/frontend
+    - name: Type check frontend
+      run: npx tsc --noEmit
+      working-directory: Mini-Projects/chat-app/frontend
       
     - name: Install backend dependencies
       run: npm install
+      working-directory: Mini-Projects/chat-app/backend
+    - name: Test backend
+      run: npm test
       working-directory: Mini-Projects/chat-app/backend
